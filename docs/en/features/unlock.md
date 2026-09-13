@@ -11,13 +11,7 @@ Many streaming and AI services block datacenter IPs. PSM sends **only those serv
 
 **Cloudflare WARP** — registers a WARP account in one step and adds it as an outbound. Xray, sing-box and mihomo share the same WARP account.
 
-**Residential exit** — picks genuine home-broadband IPs out of the public VPNGate list and connects to one through a separate tunnel. Services that judge you by IP ownership see a residential IP.
-
-- You pick the country; the list shows how many working nodes each country has.
-- When a node drops, it fails over to another node in **the same country**, so the exit country never drifts.
-- If the tunnel is down, matching traffic fails instead of leaking out through the datacenter IP.
-- It uses its own routing table only, so the server's own traffic and SSH are untouched.
-- All three cores share one tunnel; switching nodes needs no config changes.
+**Free residential exit** — genuine home-broadband IPs as an exit, so services that judge you by IP ownership see a residential IP. See [Free residential exit](/en/features/residential).
 
 **Your own outbound** — another node of yours (VLESS, Trojan, Shadowsocks, SOCKS5, …) can serve as an exit too.
 

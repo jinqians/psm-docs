@@ -24,6 +24,7 @@ Key facts:
 - [Subscriptions and clients](https://psm-docs.pages.dev/en/features/subscription)
 - [Per-user accounts](https://psm-docs.pages.dev/en/features/users)
 - [Traffic quotas and expiry](https://psm-docs.pages.dev/en/features/traffic)
+- [Free residential exit](https://psm-docs.pages.dev/en/features/residential): home-broadband IPs from VPNGate as a free exit for streaming and AI services
 - [Unlocking Netflix / ChatGPT](https://psm-docs.pages.dev/en/features/unlock)
 - [Moving to a new server](https://psm-docs.pages.dev/en/features/migrate)
 - [Diagnose and repair](https://psm-docs.pages.dev/en/features/doctor)
@@ -40,6 +41,7 @@ Key facts:
 - [协议怎么选](https://psm-docs.pages.dev/guide/choose-protocol)
 - [443 端口复用](https://psm-docs.pages.dev/features/port-443)
 - [多用户](https://psm-docs.pages.dev/features/users)
+- [免费家宽出口](https://psm-docs.pages.dev/features/residential)
 - [解锁 Netflix / ChatGPT](https://psm-docs.pages.dev/features/unlock)
 - [一键迁移服务器](https://psm-docs.pages.dev/features/migrate)
 - [常见问题](https://psm-docs.pages.dev/faq)

@@ -2,12 +2,12 @@
 layout: home
 title: "PSM: one-command proxy server setup on a VPS (Xray, sing-box, mihomo)"
 titleTemplate: false
-description: PSM is an open-source script that turns a VPS into your own proxy server in one command. VLESS REALITY, Hysteria2, TUIC, AnyTLS and Snell nodes on Xray, sing-box and mihomo, with port 443 sharing, subscriptions, per-user accounts, traffic quotas and server migration.
+description: PSM is an open-source script that installs Xray, sing-box and mihomo on a VPS in one command. REALITY, Hysteria2, Snell, Shadowsocks 2022, AnyTLS and TUIC nodes ready to use, with WARP routing, a free residential exit, custom routing, traffic monitoring and multi-user management.
 
 hero:
   name: PSM
   text: Your own proxy server on a VPS, in one command
-  tagline: Installs Xray, sing-box and mihomo. REALITY, Hysteria2 and TUIC nodes in minutes, with accounts, traffic quotas and one-command migration.
+  tagline: One-command install of Xray / sing-box / mihomo. REALITY, Hysteria2, Snell, Shadowsocks 2022, AnyTLS and TUIC nodes ready to use, with WARP routing, a free residential exit, custom routing, traffic monitoring and multi-user management.
   image:
     src: /logo.svg
     alt: PSM proxy server manager
@@ -35,6 +35,14 @@ features:
     title: Xray, sing-box and mihomo
     details: All three cores can run side by side on one server, each with its own nodes.
     link: /en/guide/cores
+  - icon: 🏠
+    title: Free residential exit
+    details: Picks genuine home-broadband IPs as an exit, so Netflix and ChatGPT see a residential IP; fails over within the same country.
+    link: /en/features/residential
+  - icon: 🎬
+    title: WARP and custom routing
+    details: Cloudflare WARP as an exit, and routing by domain, GeoSite or subscribed rule set; everything else stays direct.
+    link: /en/features/unlock
   - icon: 🔒
     title: Share port 443
     details: Many nodes behind one port 443, routed by domain; unknown names are dropped, so scanners find nothing.
@@ -44,13 +52,13 @@ features:
     details: Standard share links, QR codes and subscriptions for v2rayN, Clash Verge Rev, Shadowrocket, sing-box and other clients.
     link: /en/features/subscription
   - icon: 👥
-    title: Accounts and traffic quotas
+    title: Multi-user management
     details: Each person gets their own UUID / password, expiry date and subscription URL; accounts pause when they expire or run out.
     link: /en/features/users
-  - icon: 🎬
-    title: Unlock Netflix and ChatGPT
-    details: Route streaming and AI services through Cloudflare WARP or a residential exit, by rule, while everything else stays direct.
-    link: /en/features/unlock
+  - icon: 📊
+    title: Traffic monitoring
+    details: Per-node traffic counted every minute, monthly quotas, a Telegram warning at 90% and an automatic pause when used up.
+    link: /en/features/traffic
   - icon: 📦
     title: Move to a new server
     details: psm migrate push root@new-server carries nodes, keys and certificates over; clients keep working.
@@ -59,29 +67,8 @@ features:
     title: Diagnose and repair
     details: psm doctor --fix checks services, certificates, boot start and firewall rules, and repairs what it can.
     link: /en/features/doctor
+  - icon: 🔐
+    title: Server hardening
+    details: SSH key login with automatic rollback, Fail2ban, honeypots, and proxy cores that run unprivileged.
+    link: /en/features/security
 ---
-
-## Install
-
-As root on your VPS:
-
-```bash
-bash <(curl -fsSL https://psm.jinqians.com)
-```
-
-Then run `psm` to open the menu. Requirements, Alpine and uninstalling: [Install](/en/guide/install).
-
-## Who it is for
-
-- **You have a VPS and want your own proxy** instead of a shared VPN or proxy service, with the bandwidth and IP to yourself.
-- **You need protocols that survive censorship**: REALITY, Hysteria2, TUIC and AnyTLS, several at once if you like.
-- **You share access with family or friends**: separate credentials and subscriptions, with expiry dates and monthly quotas.
-- **You want Netflix or ChatGPT to work**: route them through WARP or a residential exit when the datacenter IP is blocked.
-- **You move servers now and then**: one command moves the whole setup to a new VPS.
-
-## Common questions
-
-- [How do I set up a proxy server on a VPS?](/en/faq#how-to-build)
-- [REALITY, Hysteria2 or TUIC?](/en/guide/choose-protocol)
-- [Which systems are supported?](/en/reference/systems)
-- [More questions](/en/faq)
