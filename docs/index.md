@@ -22,6 +22,9 @@ hero:
     - theme: alt
       text: GitHub
       link: https://github.com/jinqians/proxy-stack
+    - theme: alt
+      text: 博客
+      link: https://jinqians.com
 
 features:
   - icon: 🚀
@@ -46,7 +49,7 @@ features:
     link: /features/unlock#rules
   - icon: 🏠
     title: 免费家宽出口
-    details: 自动挑选真正的住宅宽带 IP 做出口，Netflix、ChatGPT 看到的是家宽 IP；掉线自动换同国家节点，完全免费。
+    details: 自动挑选真正的住宅宽带 IP 做出口，支持日本、台湾、韩国、美国免费家宽，建议选择离VPS近的家宽；掉线自动换同国家节点，完全免费。
     link: /features/residential
   - icon: 🔒
     title: 443 端口复用

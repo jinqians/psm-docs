@@ -22,6 +22,9 @@ hero:
     - theme: alt
       text: GitHub
       link: https://github.com/jinqians/proxy-stack
+    - theme: alt
+      text: Blog
+      link: https://jinqians.com
 
 features:
   - icon: 🚀
@@ -46,7 +49,7 @@ features:
     link: /en/features/unlock#rules
   - icon: 🏠
     title: Free residential exit
-    details: Picks genuine home-broadband IPs as an exit, so Netflix and ChatGPT see a residential IP; fails over within the same country, and costs nothing.
+    details: Picks genuine home-broadband IPs as an exit, with free residential IPs in Japan, Taiwan, South Korea and the US (pick one close to your VPS); fails over within the same country, and costs nothing.
     link: /en/features/residential
   - icon: 🔒
     title: Share port 443
