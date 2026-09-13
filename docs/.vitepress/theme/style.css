@@ -17,6 +17,38 @@
   --vp-c-brand-3: #059669;
 }
 
+/* home hero: the "PSM" name keeps the theme's size; the line under it and the
+   tagline are smaller than the defaults (32/48/56px and 18/20/24px), so the
+   long tagline reads as a sentence rather than a headline */
+.VPHero .main .text {
+  font-size: 26px;
+  line-height: 34px;
+}
+.VPHero .main .tagline {
+  font-size: 15px;
+  line-height: 24px;
+}
+@media (min-width: 640px) {
+  .VPHero .main .text {
+    font-size: 34px;
+    line-height: 42px;
+  }
+  .VPHero .main .tagline {
+    font-size: 16px;
+    line-height: 26px;
+  }
+}
+@media (min-width: 960px) {
+  .VPHero .main .text {
+    font-size: 40px;
+    line-height: 48px;
+  }
+  .VPHero .main .tagline {
+    font-size: 18px;
+    line-height: 28px;
+  }
+}
+
 /* terminal screenshots: a frame that reads as a window, in both themes */
 .vp-doc img.shot {
   border-radius: 10px;

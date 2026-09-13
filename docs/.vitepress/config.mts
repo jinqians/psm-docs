@@ -65,6 +65,24 @@ const zhSidebar: Group[] = [
     ],
   },
   {
+    text: '协议教程',
+    items: [
+      { text: '总览', link: '/protocols/' },
+      { text: 'VLESS REALITY', link: '/protocols/reality' },
+      { text: 'VLESS Vision', link: '/protocols/vision' },
+      { text: 'VLESS XHTTP', link: '/protocols/xhttp' },
+      { text: 'VLESS + TLS', link: '/protocols/vless' },
+      { text: 'Hysteria2', link: '/protocols/hysteria2' },
+      { text: 'TUIC', link: '/protocols/tuic' },
+      { text: 'AnyTLS', link: '/protocols/anytls' },
+      { text: 'Shadowsocks 2022', link: '/protocols/ss2022' },
+      { text: 'Trojan 与 VMess', link: '/protocols/trojan-vmess' },
+      { text: 'Snell', link: '/protocols/snell' },
+      { text: 'SOCKS5', link: '/protocols/socks5' },
+      { text: 'WireGuard', link: '/protocols/wireguard' },
+    ],
+  },
+  {
     text: '功能',
     items: [
       { text: '443 端口复用', link: '/features/port-443' },
@@ -76,6 +94,13 @@ const zhSidebar: Group[] = [
       { text: '一键迁移服务器', link: '/features/migrate' },
       { text: '诊断与自动修复', link: '/features/doctor' },
       { text: '服务器安全加固', link: '/features/security' },
+      { text: '防止被偷流量', link: '/features/anti-theft' },
+      { text: 'SSL 证书', link: '/features/cert' },
+      { text: '备份与恢复', link: '/features/backup' },
+      { text: '中转（realm）', link: '/features/relay' },
+      { text: 'Telegram 机器人', link: '/features/telegram' },
+      { text: 'Cloudflare DDNS 与 Tunnel', link: '/features/cloudflare' },
+      { text: '系统优化与 VPS 测试', link: '/features/system' },
     ],
   },
   {
@@ -101,6 +126,24 @@ const enSidebar: Group[] = [
     ],
   },
   {
+    text: 'Protocol guides',
+    items: [
+      { text: 'Overview', link: '/en/protocols/' },
+      { text: 'VLESS REALITY', link: '/en/protocols/reality' },
+      { text: 'VLESS Vision', link: '/en/protocols/vision' },
+      { text: 'VLESS XHTTP', link: '/en/protocols/xhttp' },
+      { text: 'VLESS + TLS', link: '/en/protocols/vless' },
+      { text: 'Hysteria2', link: '/en/protocols/hysteria2' },
+      { text: 'TUIC', link: '/en/protocols/tuic' },
+      { text: 'AnyTLS', link: '/en/protocols/anytls' },
+      { text: 'Shadowsocks 2022', link: '/en/protocols/ss2022' },
+      { text: 'Trojan and VMess', link: '/en/protocols/trojan-vmess' },
+      { text: 'Snell', link: '/en/protocols/snell' },
+      { text: 'SOCKS5', link: '/en/protocols/socks5' },
+      { text: 'WireGuard', link: '/en/protocols/wireguard' },
+    ],
+  },
+  {
     text: 'Features',
     items: [
       { text: 'Sharing port 443', link: '/en/features/port-443' },
@@ -112,6 +155,13 @@ const enSidebar: Group[] = [
       { text: 'Moving to a new server', link: '/en/features/migrate' },
       { text: 'Diagnose and repair', link: '/en/features/doctor' },
       { text: 'Server hardening', link: '/en/features/security' },
+      { text: 'Preventing traffic theft', link: '/en/features/anti-theft' },
+      { text: 'SSL certificates', link: '/en/features/cert' },
+      { text: 'Backup and restore', link: '/en/features/backup' },
+      { text: 'Relays (realm)', link: '/en/features/relay' },
+      { text: 'Telegram bot', link: '/en/features/telegram' },
+      { text: 'Cloudflare DDNS and Tunnel', link: '/en/features/cloudflare' },
+      { text: 'System tuning and VPS tests', link: '/en/features/system' },
     ],
   },
   {
@@ -303,8 +353,10 @@ export default defineConfig({
     ]
     for (const sidebar of [enSidebar, zhSidebar])
       for (const group of sidebar)
-        for (const item of group.items)
-          parts.push('\n---\n', llmsPage(join(srcDir, `${item.link.slice(1)}.md`), `${SITE}${item.link}`))
+        for (const item of group.items) {
+          const file = item.link.endsWith('/') ? `${item.link.slice(1)}index.md` : `${item.link.slice(1)}.md`
+          parts.push('\n---\n', llmsPage(join(srcDir, file), `${SITE}${item.link}`))
+        }
     writeFileSync(join(outDir, 'llms-full.txt'), parts.join('\n'))
   },
 
@@ -320,6 +372,7 @@ export default defineConfig({
         nav: [
           { text: '快速开始', link: '/guide/quick-start' },
           { text: '指南', link: '/guide/introduction' },
+          { text: '协议', link: '/protocols/' },
           { text: '功能', link: '/features/port-443' },
           { text: '命令参考', link: '/reference/cli' },
           { text: '常见问题', link: '/faq' },
@@ -352,6 +405,7 @@ export default defineConfig({
         nav: [
           { text: 'Quick start', link: '/en/guide/quick-start' },
           { text: 'Guide', link: '/en/guide/introduction' },
+          { text: 'Protocols', link: '/en/protocols/' },
           { text: 'Features', link: '/en/features/port-443' },
           { text: 'CLI', link: '/en/reference/cli' },
           { text: 'FAQ', link: '/en/faq' },

@@ -8,11 +8,13 @@ Key facts:
 
 - Runs on Debian, Ubuntu, Alpine (OpenRC) and the Red Hat family (RHEL, Rocky Linux, AlmaLinux); x86_64 and arm64; needs root.
 - Several nodes can share one public port 443: Nginx routes TLS connections by SNI without decrypting them, and drops unknown names.
-- Exports standard share links, QR codes and subscriptions for clients such as v2rayN, Clash Verge Rev, Shadowrocket and sing-box.
+- Exports standard share links, QR codes and subscriptions for clients such as v2rayN, Clash Verge Rev, Shadowrocket and sing-box; Snell exports a Surge line.
 - Per-user accounts (`psm user`): own UUID and password per user, expiry dates, own subscription URL; monthly traffic quotas on Xray nodes.
-- Routes Netflix / ChatGPT and similar services through Cloudflare WARP or a free residential exit (VPNGate home-broadband nodes) by rule.
+- Per-node traffic quotas for every core's nodes and the standalone Snell and ss-rust, with Telegram alerts.
+- Routes Netflix / ChatGPT and similar services through Cloudflare WARP or a free residential exit (VPNGate home-broadband nodes) by rule or subscribed rule set.
 - `psm migrate push root@new-server` moves a whole server (nodes, keys, certificates, Nginx, acme.sh) to a new VPS.
 - `psm doctor --fix` diagnoses and repairs common problems; the proxy cores run as an unprivileged user.
+- Also: acme.sh certificates, backups, realm relays, a Telegram bot, Cloudflare DDNS / Tunnel, BBR and VPS test tools.
 - A menu over SSH, not a web panel: no management port is exposed.
 - Interface in Simplified Chinese, English, Korean and Russian.
 
@@ -20,19 +22,48 @@ Key facts:
 
 - [What is PSM](https://psm-docs.pages.dev/en/guide/introduction): what it does and who it is for
 - [Install](https://psm-docs.pages.dev/en/guide/install): requirements, one-command install, Alpine, update, uninstall
-- [Quick start](https://psm-docs.pages.dev/en/guide/quick-start): a first REALITY node and importing it into a client
+- [Quick start](https://psm-docs.pages.dev/en/guide/quick-start): install a core (Xray, sing-box, mihomo) or Snell, create a first node, import it into a client
 - [Choosing a protocol](https://psm-docs.pages.dev/en/guide/choose-protocol): REALITY vs Hysteria2 vs TUIC vs AnyTLS
 - [Xray, sing-box, mihomo](https://psm-docs.pages.dev/en/guide/cores): how the three cores differ
 - [Glossary](https://psm-docs.pages.dev/en/guide/glossary): REALITY, Hysteria2, TUIC, AnyTLS, SNI, WARP, residential IP and more, defined
+
+Protocol guides (menu path, command line, options, export):
+
+- [Overview](https://psm-docs.pages.dev/en/protocols/): every protocol, which cores run it, whether it needs a certificate
+- [VLESS REALITY](https://psm-docs.pages.dev/en/protocols/reality)
+- [VLESS Vision](https://psm-docs.pages.dev/en/protocols/vision)
+- [VLESS XHTTP](https://psm-docs.pages.dev/en/protocols/xhttp): XHTTP, WebSocket, gRPC, HTTPUpgrade, HTTP/2, REALITY layer, mKCP
+- [VLESS + TLS](https://psm-docs.pages.dev/en/protocols/vless): sing-box / mihomo transports
+- [Hysteria2](https://psm-docs.pages.dev/en/protocols/hysteria2): port hopping, Salamander / Gecko obfuscation
+- [TUIC v5](https://psm-docs.pages.dev/en/protocols/tuic)
+- [AnyTLS](https://psm-docs.pages.dev/en/protocols/anytls)
+- [Shadowsocks 2022](https://psm-docs.pages.dev/en/protocols/ss2022): ciphers, ShadowTLS, ss-rust
+- [Trojan and VMess](https://psm-docs.pages.dev/en/protocols/trojan-vmess)
+- [Snell](https://psm-docs.pages.dev/en/protocols/snell): standalone snell-server, sing-box and mihomo nodes, Surge export
+- [SOCKS5](https://psm-docs.pages.dev/en/protocols/socks5)
+- [WireGuard](https://psm-docs.pages.dev/en/protocols/wireguard)
+
+Features:
+
 - [Sharing port 443](https://psm-docs.pages.dev/en/features/port-443)
 - [Subscriptions and clients](https://psm-docs.pages.dev/en/features/subscription)
 - [Per-user accounts](https://psm-docs.pages.dev/en/features/users)
 - [Traffic quotas and expiry](https://psm-docs.pages.dev/en/features/traffic)
 - [Free residential exit](https://psm-docs.pages.dev/en/features/residential): home-broadband IPs from VPNGate as a free exit for streaming and AI services
-- [Unlocking Netflix / ChatGPT](https://psm-docs.pages.dev/en/features/unlock)
+- [Unlocking Netflix / ChatGPT](https://psm-docs.pages.dev/en/features/unlock): WARP, rule sets, custom exits
 - [Moving to a new server](https://psm-docs.pages.dev/en/features/migrate)
 - [Diagnose and repair](https://psm-docs.pages.dev/en/features/doctor)
 - [Server hardening](https://psm-docs.pages.dev/en/features/security)
+- [Preventing traffic theft](https://psm-docs.pages.dev/en/features/anti-theft): shared-CDN camouflage targets, fallback rate limiting, unknown names dropped on 443, subscription and account protection
+- [SSL certificates](https://psm-docs.pages.dev/en/features/cert)
+- [Backup and restore](https://psm-docs.pages.dev/en/features/backup)
+- [Relays (realm)](https://psm-docs.pages.dev/en/features/relay)
+- [Telegram bot](https://psm-docs.pages.dev/en/features/telegram)
+- [Cloudflare DDNS and Tunnel](https://psm-docs.pages.dev/en/features/cloudflare)
+- [System tuning and VPS tests](https://psm-docs.pages.dev/en/features/system)
+
+Reference:
+
 - [CLI reference](https://psm-docs.pages.dev/en/reference/cli)
 - [Supported systems](https://psm-docs.pages.dev/en/reference/systems)
 - [FAQ](https://psm-docs.pages.dev/en/faq): includes self-hosting vs. proxy subscriptions, and PSM vs. web panels such as 3x-ui
@@ -41,10 +72,29 @@ Key facts:
 
 - [什么是 PSM](https://psm-docs.pages.dev/guide/introduction)
 - [一键安装](https://psm-docs.pages.dev/guide/install)
-- [1 分钟快速开始](https://psm-docs.pages.dev/guide/quick-start)
+- [1 分钟快速开始](https://psm-docs.pages.dev/guide/quick-start)：安装 Xray / sing-box / mihomo 或 Snell，建第一个节点
 - [协议怎么选](https://psm-docs.pages.dev/guide/choose-protocol)
 - [Xray / sing-box / mihomo 的区别](https://psm-docs.pages.dev/guide/cores)
 - [术语表](https://psm-docs.pages.dev/guide/glossary)
+
+协议教程：
+
+- [总览](https://psm-docs.pages.dev/protocols/)
+- [VLESS REALITY](https://psm-docs.pages.dev/protocols/reality)
+- [VLESS Vision](https://psm-docs.pages.dev/protocols/vision)
+- [VLESS XHTTP](https://psm-docs.pages.dev/protocols/xhttp)
+- [VLESS + TLS](https://psm-docs.pages.dev/protocols/vless)
+- [Hysteria2](https://psm-docs.pages.dev/protocols/hysteria2)
+- [TUIC](https://psm-docs.pages.dev/protocols/tuic)
+- [AnyTLS](https://psm-docs.pages.dev/protocols/anytls)
+- [Shadowsocks 2022](https://psm-docs.pages.dev/protocols/ss2022)
+- [Trojan 与 VMess](https://psm-docs.pages.dev/protocols/trojan-vmess)
+- [Snell](https://psm-docs.pages.dev/protocols/snell)
+- [SOCKS5](https://psm-docs.pages.dev/protocols/socks5)
+- [WireGuard](https://psm-docs.pages.dev/protocols/wireguard)
+
+功能：
+
 - [443 端口复用](https://psm-docs.pages.dev/features/port-443)
 - [订阅与客户端导入](https://psm-docs.pages.dev/features/subscription)
 - [多用户](https://psm-docs.pages.dev/features/users)
@@ -54,6 +104,16 @@ Key facts:
 - [一键迁移服务器](https://psm-docs.pages.dev/features/migrate)
 - [诊断与自动修复](https://psm-docs.pages.dev/features/doctor)
 - [服务器安全加固](https://psm-docs.pages.dev/features/security)
+- [防止被偷流量](https://psm-docs.pages.dev/features/anti-theft)
+- [SSL 证书](https://psm-docs.pages.dev/features/cert)
+- [备份与恢复](https://psm-docs.pages.dev/features/backup)
+- [中转（realm）](https://psm-docs.pages.dev/features/relay)
+- [Telegram 机器人](https://psm-docs.pages.dev/features/telegram)
+- [Cloudflare DDNS 与 Tunnel](https://psm-docs.pages.dev/features/cloudflare)
+- [系统优化与 VPS 测试](https://psm-docs.pages.dev/features/system)
+
+参考：
+
 - [命令参考](https://psm-docs.pages.dev/reference/cli)
 - [支持的系统](https://psm-docs.pages.dev/reference/systems)
 - [常见问题](https://psm-docs.pages.dev/faq)

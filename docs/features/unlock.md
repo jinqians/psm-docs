@@ -16,6 +16,16 @@ keywords: WARP 分流, 解锁 Netflix, 解锁 ChatGPT, 分流规则, GeoSite, �
 
 **自定义出站** — 你自己的其他节点（VLESS、Trojan、Shadowsocks、SOCKS5 等）也可以当出口。
 
+## 开启 WARP {#warp}
+
+1. 进入内核菜单 → **5. 路由分流管理**（sing-box 是主菜单 2 → 5，mihomo 是 3 → 5，Xray 是 4 → 5）。
+2. 选 **WARP 解锁出站（Netflix / OpenAI 等）**，PSM 自动注册 WARP 账号、写好出站，并按提示加上分流规则。
+3. 选 **查看 WARP 实际出口 IP**，确认出口已经是 Cloudflare 的 IP。
+
+![sing-box 的路由分流管理菜单](/images/routing.zh.png){.shot}
+
+同一个菜单里还有 **一键拦截广告**、**一键屏蔽 QUIC** 两个开关，以及自定义出站节点的增删。
+
 ## 按规则分流 {#rules}
 
 在各内核菜单的「路由分流管理」里设置规则：
@@ -23,6 +33,10 @@ keywords: WARP 分流, 解锁 Netflix, 解锁 ChatGPT, 分流规则, GeoSite, �
 - **按域名、GeoSite、GeoIP** 指定出口，例如 `geosite:netflix` 走 WARP。
 - **订阅式规则集**：贴一个社区规则表的网址（比如 OpenAI.list），选一个出口，表里的所有域名都会从这个出口走。规则集每天自动更新：sing-box 和 mihomo 不用重启；Xray 只在内容真的变了时才重启一次。
 - 应用前会先显示规则集里有多少条能用，客户端专用的类型会明确告诉你被丢弃了。
+
+规则集在「路由分流管理」→ **规则集分流（订阅式规则表）** 里管理：可以从常用规则集（来自社区维护的 blackmatrix7）里直接选，也可以贴自定义网址；另有立即更新、移除和每日自动更新开关。
+
+![规则集分流菜单](/images/ruleset.zh.png){.shot}
 
 ## 先测一下
 

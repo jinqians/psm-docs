@@ -12,16 +12,16 @@ keywords: REALITY 和 Hysteria2 哪个好, 科学上网协议对比, 翻墙协�
 
 | 协议 | 传输 | 需要域名和证书 | 优点 | 需要注意 | PSM 支持的内核 |
 | --- | --- | --- | --- | --- | --- |
-| VLESS REALITY | TCP | 不需要 | 借用真实网站的 TLS 握手，主动探测看到的是真网站；只有 IP 也能用 | 伪装目标要选好，不要选 CDN 后面的站点 | Xray、sing-box、mihomo |
-| VLESS Vision | TCP + TLS | 需要 | 真实证书，可以挂伪装网站 | 要有自己的域名 | Xray |
-| VLESS XHTTP | TCP（HTTP） | 视模式而定 | 可以走 CDN，也有 REALITY 模式 | 配置选项多 | Xray |
-| Hysteria2 | UDP（QUIC） | 需要（可自签） | 弱网、丢包环境下速度优势明显；可开端口跳跃 | 部分运营商会限速或屏蔽 UDP | Xray、sing-box、mihomo |
-| TUIC v5 | UDP（QUIC） | 需要（可自签） | 延迟低，多路复用 | 同样依赖 UDP 质量 | sing-box、mihomo |
-| AnyTLS | TCP + TLS | 需要（可自签） | 专门处理 TLS-in-TLS 的流量特征 | 客户端支持相对少 | sing-box、mihomo |
-| Shadowsocks 2022 | TCP / UDP | 不需要 | 简单、快、资源占用小 | 没有伪装层，更适合中转或网络宽松的环境 | Xray、sing-box、mihomo |
-| Trojan / VMess | TCP + TLS | 需要（可自签） | 客户端兼容性最好 | 抗封锁能力不如 REALITY | Xray、sing-box、mihomo |
-| Snell | TCP | 不需要 | Surge 原生支持 | 只适合 Surge 用户 | sing-box、mihomo |
-| WireGuard | UDP | 不需要 | 全局 VPN 式连接 | 特征明显，不适合用来过墙 | sing-box |
+| [VLESS REALITY](/protocols/reality) | TCP | 不需要 | 借用真实网站的 TLS 握手，主动探测看到的是真网站；只有 IP 也能用 | 伪装目标要选好，不要选 CDN 后面的站点 | Xray、sing-box、mihomo |
+| [VLESS Vision](/protocols/vision) | TCP + TLS | 需要 | 真实证书，可以挂伪装网站 | 要有自己的域名 | Xray |
+| [VLESS XHTTP](/protocols/xhttp) | TCP（HTTP） | 视模式而定 | 可以走 CDN，也有 REALITY 模式 | 配置选项多 | Xray |
+| [Hysteria2](/protocols/hysteria2) | UDP（QUIC） | 需要（可自签） | 弱网、丢包环境下速度优势明显；可开端口跳跃 | 部分运营商会限速或屏蔽 UDP | Xray、sing-box、mihomo |
+| [TUIC v5](/protocols/tuic) | UDP（QUIC） | 需要（可自签） | 延迟低，多路复用 | 同样依赖 UDP 质量 | sing-box、mihomo |
+| [AnyTLS](/protocols/anytls) | TCP + TLS | 需要（可自签） | 专门处理 TLS-in-TLS 的流量特征 | 客户端支持相对少 | sing-box、mihomo |
+| [Shadowsocks 2022](/protocols/ss2022) | TCP / UDP | 不需要 | 简单、快、资源占用小 | 没有伪装层，更适合中转或网络宽松的环境 | Xray、sing-box、mihomo |
+| [Trojan / VMess](/protocols/trojan-vmess) | TCP + TLS | 需要（可自签） | 客户端兼容性最好 | 抗封锁能力不如 REALITY | Xray、sing-box、mihomo |
+| [Snell](/protocols/snell) | TCP | 不需要 | Surge 原生支持 | 只适合 Surge 用户 | sing-box、mihomo、Snell独立安装 |
+| [WireGuard](/protocols/wireguard) | UDP | 不需要 | 全局 VPN 式连接 | 特征明显，不适合用来过墙 | sing-box |
 
 ## 按场景选
 
@@ -39,7 +39,7 @@ keywords: REALITY 和 Hysteria2 哪个好, 科学上网协议对比, 翻墙协�
 
 REALITY 需要一个"伪装目标"：一个支持 TLS 1.3 的真实网站。选择原则：
 
-- **不要选 Cloudflare、Akamai 这类 CDN 后面的站点**。否则别人可以借你的服务器访问整个 CDN，流量算你的。PSM 配置时会检测并提醒。
+- **不建议使用 Cloudflare、Akamai 这类 CDN 后面的站点**。否则别人可以借你的服务器访问整个 CDN，流量算你的。PSM 配置时会检测并提醒。
 - 优先选和你的 VPS **同一个机房、同一个网络** 的站点。PSM 的 Xray 可以用网络测绘引擎自动帮你找。
 - 避开被教程用烂的大厂域名。
 - PSM 会在创建节点前用真实内核做一次握手测试，测不通的目标不会被采用。

@@ -12,16 +12,16 @@ keywords: REALITY vs Hysteria2, proxy protocol comparison, TUIC, AnyTLS, censors
 
 | Protocol | Transport | Domain and certificate | Strengths | Watch out for | Cores in PSM |
 | --- | --- | --- | --- | --- | --- |
-| VLESS REALITY | TCP | not needed | Borrows a real website's TLS handshake, so active probes see that website; works with just an IP | Pick the camouflage target carefully; never one behind a CDN | Xray, sing-box, mihomo |
-| VLESS Vision | TCP + TLS | needed | A real certificate, with a camouflage website | Needs your own domain | Xray |
-| VLESS XHTTP | TCP (HTTP) | depends on mode | Can go through a CDN; has a REALITY mode | Many options | Xray |
-| Hysteria2 | UDP (QUIC) | needed (self-signed works) | Much faster on lossy links; optional port hopping | Some ISPs throttle or block UDP | Xray, sing-box, mihomo |
-| TUIC v5 | UDP (QUIC) | needed (self-signed works) | Low latency, multiplexed | Depends on UDP quality too | sing-box, mihomo |
-| AnyTLS | TCP + TLS | needed (self-signed works) | Designed against the TLS-in-TLS traffic pattern | Fewer clients support it | sing-box, mihomo |
-| Shadowsocks 2022 | TCP / UDP | not needed | Simple, fast, light | No camouflage layer; better for relays or relaxed networks | Xray, sing-box, mihomo |
-| Trojan / VMess | TCP + TLS | needed (self-signed works) | Widest client support | Less censorship-resistant than REALITY | Xray, sing-box, mihomo |
-| Snell | TCP | not needed | Native in Surge | Surge users only | sing-box, mihomo |
-| WireGuard | UDP | not needed | Whole-device VPN | Easy to fingerprint; not for getting past censorship | sing-box |
+| [VLESS REALITY](/en/protocols/reality) | TCP | not needed | Borrows a real website's TLS handshake, so active probes see that website; works with just an IP | Pick the camouflage target carefully; never one behind a CDN | Xray, sing-box, mihomo |
+| [VLESS Vision](/en/protocols/vision) | TCP + TLS | needed | A real certificate, with a camouflage website | Needs your own domain | Xray |
+| [VLESS XHTTP](/en/protocols/xhttp) | TCP (HTTP) | depends on mode | Can go through a CDN; has a REALITY mode | Many options | Xray |
+| [Hysteria2](/en/protocols/hysteria2) | UDP (QUIC) | needed (self-signed works) | Much faster on lossy links; optional port hopping | Some ISPs throttle or block UDP | Xray, sing-box, mihomo |
+| [TUIC v5](/en/protocols/tuic) | UDP (QUIC) | needed (self-signed works) | Low latency, multiplexed | Depends on UDP quality too | sing-box, mihomo |
+| [AnyTLS](/en/protocols/anytls) | TCP + TLS | needed (self-signed works) | Designed against the TLS-in-TLS traffic pattern | Fewer clients support it | sing-box, mihomo |
+| [Shadowsocks 2022](/en/protocols/ss2022) | TCP / UDP | not needed | Simple, fast, light | No camouflage layer; better for relays or relaxed networks | Xray, sing-box, mihomo |
+| [Trojan / VMess](/en/protocols/trojan-vmess) | TCP + TLS | needed (self-signed works) | Widest client support | Less censorship-resistant than REALITY | Xray, sing-box, mihomo |
+| [Snell](/en/protocols/snell) | TCP | not needed | Native in Surge | Surge users only | sing-box, mihomo; plus a standalone server |
+| [WireGuard](/en/protocols/wireguard) | UDP | not needed | Whole-device VPN | Easy to fingerprint; not for getting past censorship | sing-box |
 
 ## By situation
 

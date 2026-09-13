@@ -27,7 +27,9 @@ PSM exports every node at once in three formats:
 | `mihomo.yaml` | complete Clash Meta (mihomo) config | Clash Verge Rev, Mihomo Party, FlClash, … |
 | `singbox.json` | complete sing-box client config | the sing-box apps, Karing, Hiddify, … |
 
-Choose the local export in the Subscription menu; the files are saved on the server for you to download.
+In main menu **22 (Subscriptions)** choose **Export to local files**; the files are saved on the server for you to download. The same menu creates, shows and turns off the online subscription:
+
+![Client config export and subscription menu](/images/subscribe.en.png){.shot}
 
 ## Online subscription
 

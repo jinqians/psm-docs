@@ -40,7 +40,9 @@ Xray 能按用户统计流量，sing-box 和 mihomo 不提供这个数据。sing
 
 ## 支持的协议
 
-VLESS（含 REALITY、Vision、XHTTP）、VMess、Trojan、Hysteria2、TUIC、AnyTLS、SOCKS5（需开启认证）。Shadowsocks 2022、Snell、WireGuard 只有一个密钥，不支持多用户：给 SS2022 加用户会让原来的链接失效。
+VLESS（含 REALITY、Vision、XHTTP）、VMess、Trojan、Hysteria2、TUIC、AnyTLS、SOCKS5（需开启认证）。Shadowsocks 2022、Snell、WireGuard 的节点只有一个密钥，`psm user` 不给它们加用户：给 SS2022 加用户会让原来的链接失效。
+
+**独立版 Snell 有自己的多用户管理**：主菜单 **5. Snell 管理** → **1. 安装 / 重新安装** 会打开官方 snell.sh 的菜单，其中 **7. 多用户管理** 可以给每个人单独开一个端口和 PSK，各自是独立的服务，删掉一个不影响其他人。见 [Snell](/protocols/snell)。
 
 ## 它是怎么生效的
 

@@ -47,7 +47,7 @@ head:
 
 ## 伪装目标可以选 Cloudflare 后面的网站吗？ {#cdn-dest}
 
-不建议。REALITY 会把认证失败的连接原样转给伪装目标。如果目标在 CDN 后面，别人可以借你的服务器访问整个 CDN，流量算你的。PSM 配置时会检测并提醒；最好选同机房、不在 CDN 后面的站点。
+不建议。REALITY 会把认证失败的连接原样转给伪装目标。如果目标在 CDN 后面，别人可以借你的服务器访问整个 CDN，流量算你的。PSM 配置时会检测并提醒；最好选同机房、不在 CDN 后面的站点。更多见 [防止被偷流量](/features/anti-theft)。
 
 ## 日志里有 "REALITY: Listening on non-443 ports" 警告？ {#non-443}
 

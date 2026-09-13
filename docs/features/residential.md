@@ -26,7 +26,11 @@ keywords: 免费家宽 IP, 住宅 IP 出口, 家宽落地, VPNGate, 解锁 ChatG
 
 ## 怎么开启
 
-进入任意一个内核的菜单（Xray / sing-box / mihomo 管理）→ **路由分流管理** → **VPNGate 家宽出口**，选择：
+进入任意一个内核的菜单（Xray / sing-box / mihomo 管理）→ **路由分流管理** → **VPNGate 家宽出口**（sing-box、mihomo 是主菜单 2 或 3 → 5 → 11）：
+
+![VPNGate 家宽出口菜单](/images/vpngate.zh.png){.shot}
+
+最省事的是第一项：
 
 **一键接入（扫描 → 试连 → 写出站 → 解锁规则）**
 

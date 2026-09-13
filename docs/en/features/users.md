@@ -40,7 +40,9 @@ Xray counts traffic per user; sing-box and mihomo do not expose that. Their node
 
 ## Supported protocols
 
-VLESS (REALITY, Vision and XHTTP included), VMess, Trojan, Hysteria2, TUIC, AnyTLS and SOCKS5 with authentication. Shadowsocks 2022, Snell and WireGuard have a single key and no users: adding users to an SS2022 server would break its existing link.
+VLESS (REALITY, Vision and XHTTP included), VMess, Trojan, Hysteria2, TUIC, AnyTLS and SOCKS5 with authentication. Shadowsocks 2022, Snell and WireGuard nodes have a single key, so `psm user` does not add users to them: adding users to an SS2022 server would break its existing link.
+
+**The standalone Snell has its own multi-user management**: main menu **5 (Snell)** → **1 (Install / reinstall)** opens the official snell.sh menu, whose **7 (Multi-user management)** gives each person their own port and PSK, each an independent service, so removing one leaves the others alone. See [Snell](/en/protocols/snell).
 
 ## How it takes effect
 

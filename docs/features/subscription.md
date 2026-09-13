@@ -27,7 +27,9 @@ PSM 可以把所有节点一次性导出成三种格式：
 | `mihomo.yaml` | Clash Meta（mihomo）完整配置 | Clash Verge Rev、Mihomo Party、FlClash 等 |
 | `singbox.json` | sing-box 客户端完整配置 | sing-box 官方客户端、Karing、Hiddify 等 |
 
-在菜单「订阅」里选择本地导出，文件会保存在服务器上，你可以自己下载。
+在主菜单 **22. 客户端订阅** 里选 **导出到本地文件**，文件会保存在服务器上，你可以自己下载。同一个菜单里可以生成、查看和关闭在线订阅：
+
+![客户端配置导出与订阅菜单](/images/subscribe.zh.png){.shot}
 
 ## 在线订阅
 

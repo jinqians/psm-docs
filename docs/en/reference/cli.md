@@ -26,6 +26,8 @@ psm node export CORE PROTO TAG [--server HOST] [--format uri|json|surge]
 | sing-box | reality, ss2022, hysteria2, anytls, snell, trojan, vmess, socks, vless, tuic, wireguard |
 | mihomo | reality, ss2022, hysteria2, anytls, snell, trojan, vmess, socks, vless, tuic |
 
+A full guide for each protocol (menu path, options, export, screenshots) is in [Protocol guides](/en/protocols/).
+
 Common protocol options:
 
 | Protocol | Options |

@@ -26,6 +26,8 @@ psm node export CORE PROTO TAG [--server HOST] [--format uri|json|surge]
 | sing-box | reality、ss2022、hysteria2、anytls、snell、trojan、vmess、socks、vless、tuic、wireguard |
 | mihomo | reality、ss2022、hysteria2、anytls、snell、trojan、vmess、socks、vless、tuic |
 
+每个协议的完整教程（菜单路径、参数、导出、截图）见 [协议教程](/protocols/)。
+
 常用协议参数：
 
 | 协议 | 参数 |

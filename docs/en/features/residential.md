@@ -26,7 +26,11 @@ The exit comes from [VPNGate](https://www.vpngate.net/), a public VPN relay proj
 
 ## Turning it on
 
-In any core's menu (Xray, sing-box or mihomo) open **Routing**, then **VPNGate residential-IP unlock exit**, and choose:
+In any core's menu (Xray, sing-box or mihomo) open **Routing**, then **VPNGate residential-IP unlock exit** (for sing-box and mihomo: main menu 2 or 3 → 5 → 11):
+
+![VPNGate residential exit menu](/images/vpngate.en.png){.shot}
+
+The first option does it all:
 
 **One-click setup (scan -> connect -> outbound -> unlock rules)**
 

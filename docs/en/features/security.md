@@ -5,7 +5,9 @@ description: PSM hardens your VPS. SSH key login and a new port with a 5-minute 
 
 # Server hardening
 
-Everything here is under "Security" in the main menu.
+Everything here is in main menu **20 (Security)**:
+
+![Security menu](/images/security.en.png){.shot}
 
 ## SSH
 

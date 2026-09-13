@@ -47,7 +47,7 @@ Yes: `psm user` gives each person their own account, with their own credentials,
 
 ## Can the camouflage target be a site behind Cloudflare? {#cdn-dest}
 
-Better not. REALITY forwards connections that fail authentication to the camouflage target unchanged. If the target is behind a CDN, anyone can reach the whole CDN through your server, on your bandwidth. PSM checks for this and warns you; pick a site in your own datacenter that is not behind a CDN.
+Better not. REALITY forwards connections that fail authentication to the camouflage target unchanged. If the target is behind a CDN, anyone can reach the whole CDN through your server, on your bandwidth. PSM checks for this and warns you; pick a site in your own datacenter that is not behind a CDN. More in [Preventing traffic theft](/en/features/anti-theft).
 
 ## "REALITY: Listening on non-443 ports" in the log? {#non-443}
 
