@@ -1,0 +1,45 @@
+# PSM (Proxy Stack Manager)
+
+> PSM is a free, open-source (AGPL-3.0) Bash tool that turns a Linux VPS into a self-hosted proxy server with one command: `bash <(curl -fsSL https://psm.jinqians.com)`, then `psm`. It installs and manages the Xray, sing-box and mihomo (Clash.Meta) cores and builds VLESS REALITY / Vision / XHTTP, Hysteria2 (with port hopping), TUIC v5, AnyTLS, Snell, Shadowsocks 2022, Trojan, VMess, SOCKS5 and WireGuard nodes. Source: https://github.com/jinqians/proxy-stack
+
+Key facts:
+
+- Runs on Debian, Ubuntu, Alpine (OpenRC) and the Red Hat family (RHEL, Rocky Linux, AlmaLinux); x86_64 and arm64; needs root.
+- Several nodes can share one public port 443: Nginx routes TLS connections by SNI without decrypting them, and drops unknown names.
+- Exports standard share links, QR codes and subscriptions for clients such as v2rayN, Clash Verge Rev, Shadowrocket and sing-box.
+- Per-user accounts (`psm user`): own UUID and password per user, expiry dates, own subscription URL; monthly traffic quotas on Xray nodes.
+- Routes Netflix / ChatGPT and similar services through Cloudflare WARP or a residential exit by rule.
+- `psm migrate push root@new-server` moves a whole server (nodes, keys, certificates, Nginx, acme.sh) to a new VPS.
+- `psm doctor --fix` diagnoses and repairs common problems; the proxy cores run as an unprivileged user.
+- Interface in Simplified Chinese, English, Korean and Russian.
+
+## Documentation (English)
+
+- [What is PSM](https://psm-docs.pages.dev/en/guide/introduction): what it does and who it is for
+- [Install](https://psm-docs.pages.dev/en/guide/install): requirements, one-command install, Alpine, update, uninstall
+- [Quick start](https://psm-docs.pages.dev/en/guide/quick-start): a first REALITY node and importing it into a client
+- [Choosing a protocol](https://psm-docs.pages.dev/en/guide/choose-protocol): REALITY vs Hysteria2 vs TUIC vs AnyTLS
+- [Xray, sing-box, mihomo](https://psm-docs.pages.dev/en/guide/cores): how the three cores differ
+- [Sharing port 443](https://psm-docs.pages.dev/en/features/port-443)
+- [Subscriptions and clients](https://psm-docs.pages.dev/en/features/subscription)
+- [Per-user accounts](https://psm-docs.pages.dev/en/features/users)
+- [Traffic quotas and expiry](https://psm-docs.pages.dev/en/features/traffic)
+- [Unlocking Netflix / ChatGPT](https://psm-docs.pages.dev/en/features/unlock)
+- [Moving to a new server](https://psm-docs.pages.dev/en/features/migrate)
+- [Diagnose and repair](https://psm-docs.pages.dev/en/features/doctor)
+- [Server hardening](https://psm-docs.pages.dev/en/features/security)
+- [CLI reference](https://psm-docs.pages.dev/en/reference/cli)
+- [Supported systems](https://psm-docs.pages.dev/en/reference/systems)
+- [FAQ](https://psm-docs.pages.dev/en/faq)
+
+## 中文文档
+
+- [什么是 PSM](https://psm-docs.pages.dev/guide/introduction)
+- [一键安装](https://psm-docs.pages.dev/guide/install)
+- [5 分钟快速开始](https://psm-docs.pages.dev/guide/quick-start)
+- [协议怎么选](https://psm-docs.pages.dev/guide/choose-protocol)
+- [443 端口复用](https://psm-docs.pages.dev/features/port-443)
+- [多用户](https://psm-docs.pages.dev/features/users)
+- [解锁 Netflix / ChatGPT](https://psm-docs.pages.dev/features/unlock)
+- [一键迁移服务器](https://psm-docs.pages.dev/features/migrate)
+- [常见问题](https://psm-docs.pages.dev/faq)
