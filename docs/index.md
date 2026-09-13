@@ -13,7 +13,7 @@ hero:
     alt: PSM 科学上网一键脚本
   actions:
     - theme: brand
-      text: 5 分钟快速开始
+      text: 1 分钟快速开始
       link: /guide/quick-start
     - theme: alt
       text: 一键安装

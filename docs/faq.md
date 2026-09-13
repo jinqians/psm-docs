@@ -17,7 +17,7 @@ head:
 4. 创建一个 VLESS REALITY 节点。
 5. 把导出的链接或二维码导入客户端。
 
-完整步骤见 [5 分钟快速开始](/guide/quick-start)。
+完整步骤见 [1 分钟快速开始](/guide/quick-start)。
 
 ## 需要域名吗？ {#domain}
 

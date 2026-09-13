@@ -1,10 +1,10 @@
 ---
-title: "Quick start: your first VLESS REALITY node on a VPS in 5 minutes"
+title: "Quick start: your first VLESS REALITY node on a VPS in 1 minute"
 description: Step by step, set up your first proxy node with PSM. Install PSM and Xray, create a VLESS REALITY node, export its share link and QR code, and import it into v2rayN, Shadowrocket, Clash Verge Rev or another client.
 head:
   - - script
     - type: application/ld+json
-    - '{"@context":"https://schema.org","@type":"HowTo","name":"Set up a VLESS REALITY node on a VPS with PSM","totalTime":"PT5M","step":[{"@type":"HowToStep","name":"Install PSM","text":"As root: bash <(curl -fsSL https://psm.jinqians.com)"},{"@type":"HowToStep","name":"Install Xray","text":"Run psm, choose 4. Xray, then 1. Install"},{"@type":"HowToStep","name":"Create a REALITY node","text":"psm node add xray reality --tag my-reality --port 443 --server-name TARGET --dest TARGET:443"},{"@type":"HowToStep","name":"Export the link and QR code","text":"psm node export xray reality my-reality, or 12. View node links and QR codes in the Xray menu"},{"@type":"HowToStep","name":"Import into a client","text":"Paste the link or scan the QR code in v2rayN, Shadowrocket, Clash Verge Rev or another client"}]}'
+    - '{"@context":"https://schema.org","@type":"HowTo","name":"Set up a VLESS REALITY node on a VPS with PSM","step":[{"@type":"HowToStep","name":"Install PSM","text":"As root: bash <(curl -fsSL https://psm.jinqians.com)"},{"@type":"HowToStep","name":"Install Xray","text":"Run psm, choose 4. Xray, then 1. Install"},{"@type":"HowToStep","name":"Create a REALITY node","text":"psm node add xray reality --tag my-reality --port 443 --server-name TARGET --dest TARGET:443"},{"@type":"HowToStep","name":"Export the link and QR code","text":"psm node export xray reality my-reality, or 12. View node links and QR codes in the Xray menu"},{"@type":"HowToStep","name":"Import into a client","text":"Paste the link or scan the QR code in v2rayN, Shadowrocket, Clash Verge Rev or another client"}]}'
 ---
 
 # Quick start

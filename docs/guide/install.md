@@ -4,7 +4,7 @@ description: 在 VPS 上一条命令安装 PSM 科学上网管理脚本。支持
 head:
   - - script
     - type: application/ld+json
-    - '{"@context":"https://schema.org","@type":"HowTo","name":"在 VPS 上安装 PSM","description":"一条命令在 VPS 上安装 PSM 科学上网管理脚本","totalTime":"PT5M","tool":[{"@type":"HowToTool","name":"一台 Linux VPS（root 权限）"}],"step":[{"@type":"HowToStep","name":"以 root 登录 VPS","text":"用 SSH 以 root 身份登录你的 VPS。"},{"@type":"HowToStep","name":"执行一键安装命令","text":"bash <(curl -fsSL https://psm.jinqians.com)"},{"@type":"HowToStep","name":"打开管理菜单","text":"安装完成后输入 psm 进入管理菜单。"}]}'
+    - '{"@context":"https://schema.org","@type":"HowTo","name":"在 VPS 上安装 PSM","description":"一条命令在 VPS 上安装 PSM 科学上网管理脚本","tool":[{"@type":"HowToTool","name":"一台 Linux VPS（root 权限）"}],"step":[{"@type":"HowToStep","name":"以 root 登录 VPS","text":"用 SSH 以 root 身份登录你的 VPS。"},{"@type":"HowToStep","name":"执行一键安装命令","text":"bash <(curl -fsSL https://psm.jinqians.com)"},{"@type":"HowToStep","name":"打开管理菜单","text":"安装完成后输入 psm 进入管理菜单。"}]}'
 ---
 
 # 一键安装
@@ -34,7 +34,7 @@ bash <(wget -qO- https://psm.jinqians.com)
 psm
 ```
 
-就会进入管理菜单。接下来可以跟着 [5 分钟快速开始](/guide/quick-start) 搭第一个节点。
+就会进入管理菜单。接下来可以跟着 [1 分钟快速开始](/guide/quick-start) 搭第一个节点。
 
 ### Alpine
 

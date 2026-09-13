@@ -4,7 +4,7 @@ description: Install PSM on a VPS with one command. Debian, Ubuntu, Alpine and R
 head:
   - - script
     - type: application/ld+json
-    - '{"@context":"https://schema.org","@type":"HowTo","name":"Install PSM on a VPS","description":"Install the PSM proxy server manager on a VPS with one command","totalTime":"PT5M","tool":[{"@type":"HowToTool","name":"A Linux VPS with root access"}],"step":[{"@type":"HowToStep","name":"Log in as root","text":"Log in to your VPS over SSH as root."},{"@type":"HowToStep","name":"Run the installer","text":"bash <(curl -fsSL https://psm.jinqians.com)"},{"@type":"HowToStep","name":"Open the menu","text":"When the installer finishes, run psm."}]}'
+    - '{"@context":"https://schema.org","@type":"HowTo","name":"Install PSM on a VPS","description":"Install the PSM proxy server manager on a VPS with one command","tool":[{"@type":"HowToTool","name":"A Linux VPS with root access"}],"step":[{"@type":"HowToStep","name":"Log in as root","text":"Log in to your VPS over SSH as root."},{"@type":"HowToStep","name":"Run the installer","text":"bash <(curl -fsSL https://psm.jinqians.com)"},{"@type":"HowToStep","name":"Open the menu","text":"When the installer finishes, run psm."}]}'
 ---
 
 # Install

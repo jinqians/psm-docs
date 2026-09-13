@@ -1,13 +1,13 @@
 ---
-title: 5 分钟快速开始：在 VPS 上搭建第一个 VLESS REALITY 节点
+title: 1 分钟快速开始：在 VPS 上搭建第一个 VLESS REALITY 节点
 description: 手把手教你用 PSM 在 VPS 上搭建第一个科学上网节点：安装 PSM 和 Xray，创建 VLESS REALITY 节点，导出分享链接和二维码，导入 v2rayN、Shadowrocket、Clash Verge Rev 等客户端。
 head:
   - - script
     - type: application/ld+json
-    - '{"@context":"https://schema.org","@type":"HowTo","name":"用 PSM 在 VPS 上搭建 VLESS REALITY 节点","totalTime":"PT5M","step":[{"@type":"HowToStep","name":"安装 PSM","text":"以 root 执行 bash <(curl -fsSL https://psm.jinqians.com)"},{"@type":"HowToStep","name":"安装 Xray","text":"运行 psm，选择 4. Xray 管理 → 1. 安装"},{"@type":"HowToStep","name":"创建 REALITY 节点","text":"psm node add xray reality --tag my-reality --port 443 --server-name 伪装域名 --dest 伪装域名:443"},{"@type":"HowToStep","name":"导出链接和二维码","text":"psm node export xray reality my-reality，或在 Xray 菜单选择 12. 查看节点链接和二维码"},{"@type":"HowToStep","name":"导入客户端","text":"在 v2rayN、Shadowrocket、Clash Verge Rev 等客户端里粘贴链接或扫码"}]}'
+    - '{"@context":"https://schema.org","@type":"HowTo","name":"用 PSM 在 VPS 上搭建 VLESS REALITY 节点","step":[{"@type":"HowToStep","name":"安装 PSM","text":"以 root 执行 bash <(curl -fsSL https://psm.jinqians.com)"},{"@type":"HowToStep","name":"安装 Xray","text":"运行 psm，选择 4. Xray 管理 → 1. 安装"},{"@type":"HowToStep","name":"创建 REALITY 节点","text":"psm node add xray reality --tag my-reality --port 443 --server-name 伪装域名 --dest 伪装域名:443"},{"@type":"HowToStep","name":"导出链接和二维码","text":"psm node export xray reality my-reality，或在 Xray 菜单选择 12. 查看节点链接和二维码"},{"@type":"HowToStep","name":"导入客户端","text":"在 v2rayN、Shadowrocket、Clash Verge Rev 等客户端里粘贴链接或扫码"}]}'
 ---
 
-# 5 分钟快速开始
+# 1 分钟快速开始
 
 这一页带你搭好第一个节点：**VLESS REALITY**。它不需要域名和证书，是目前最省心、抗封锁能力也很强的选择。
 

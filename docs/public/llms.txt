@@ -37,7 +37,7 @@ Key facts:
 
 - [什么是 PSM](https://psm-docs.pages.dev/guide/introduction)
 - [一键安装](https://psm-docs.pages.dev/guide/install)
-- [5 分钟快速开始](https://psm-docs.pages.dev/guide/quick-start)
+- [1 分钟快速开始](https://psm-docs.pages.dev/guide/quick-start)
 - [协议怎么选](https://psm-docs.pages.dev/guide/choose-protocol)
 - [443 端口复用](https://psm-docs.pages.dev/features/port-443)
 - [多用户](https://psm-docs.pages.dev/features/users)

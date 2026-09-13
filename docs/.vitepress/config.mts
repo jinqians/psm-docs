@@ -101,7 +101,7 @@ export default defineConfig({
               items: [
                 { text: '什么是 PSM', link: '/guide/introduction' },
                 { text: '一键安装', link: '/guide/install' },
-                { text: '5 分钟快速开始', link: '/guide/quick-start' },
+                { text: '1 分钟快速开始', link: '/guide/quick-start' },
                 { text: '协议怎么选', link: '/guide/choose-protocol' },
                 { text: 'Xray / sing-box / mihomo', link: '/guide/cores' },
               ],

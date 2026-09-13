@@ -47,4 +47,4 @@ REALITY 需要一个"伪装目标"：一个支持 TLS 1.3 的真实网站。选�
 
 sing-box 和 mihomo 上的 TLS 类节点（VLESS、Trojan、AnyTLS、Hysteria2、TUIC）可以一键开启 ECH（加密 Client Hello），让握手里的域名也被加密。开了 ECH 以后，不支持 ECH 的旧客户端仍然能连。
 
-下一步：[5 分钟快速开始](/guide/quick-start)。
+下一步：[1 分钟快速开始](/guide/quick-start)。
