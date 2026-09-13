@@ -36,14 +36,18 @@ features:
     title: Xray, sing-box and mihomo
     details: All three cores can run side by side on one server, each with its own nodes.
     link: /en/guide/cores
+  - icon: 🌐
+    title: WARP routing
+    details: Registers Cloudflare WARP in one step and adds it as an outbound, one account shared by Xray, sing-box and mihomo; chosen sites go through WARP, everything else stays direct at full speed.
+    link: /en/features/unlock#exits
+  - icon: 🧭
+    title: Custom routing rules
+    details: Pick an exit by domain, GeoSite or GeoIP, or paste a community rule-set URL (such as OpenAI.list); rule sets refresh daily, and the exit can be direct, WARP, residential or a node of your own.
+    link: /en/features/unlock#rules
   - icon: 🏠
     title: Free residential exit
-    details: Picks genuine home-broadband IPs as an exit, so Netflix and ChatGPT see a residential IP; fails over within the same country.
+    details: Picks genuine home-broadband IPs as an exit, so Netflix and ChatGPT see a residential IP; fails over within the same country, and costs nothing.
     link: /en/features/residential
-  - icon: 🎬
-    title: WARP and custom routing
-    details: Cloudflare WARP as an exit, and routing by domain, GeoSite or subscribed rule set; everything else stays direct.
-    link: /en/features/unlock
   - icon: 🔒
     title: Share port 443
     details: Many nodes behind one port 443, routed by domain; unknown names are dropped, so scanners find nothing.
@@ -65,11 +69,7 @@ features:
     details: psm migrate push root@new-server carries nodes, keys and certificates over; clients keep working.
     link: /en/features/migrate
   - icon: 🩺
-    title: Diagnose and repair
-    details: psm doctor --fix checks services, certificates, boot start and firewall rules, and repairs what it can.
+    title: Diagnose, repair, harden
+    details: psm doctor --fix checks and repairs services, certificates, boot start and the firewall; SSH key login, Fail2ban, honeypots, and proxy cores that run unprivileged.
     link: /en/features/doctor
-  - icon: 🔐
-    title: Server hardening
-    details: SSH key login with automatic rollback, Fail2ban, honeypots, and proxy cores that run unprivileged.
-    link: /en/features/security
 ---

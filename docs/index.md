@@ -36,14 +36,18 @@ features:
     title: Xray、sing-box、mihomo 三内核
     details: 三个内核可以装在同一台机器上，各管各的节点，按协议和习惯挑选。
     link: /guide/cores
+  - icon: 🌐
+    title: WARP 分流
+    details: 一键注册 Cloudflare WARP 并接入出站，Xray、sing-box、mihomo 共用一个账号；指定的网站走 WARP，其余照常直连，速度不受影响。
+    link: /features/unlock#exits
+  - icon: 🧭
+    title: 自定义规则分流
+    details: 按域名、GeoSite、GeoIP 指定出口，或贴一个社区规则集网址（如 OpenAI.list）；规则集每天自动更新，出口可选直连、WARP、家宽或你自己的节点。
+    link: /features/unlock#rules
   - icon: 🏠
     title: 免费家宽出口
-    details: 自动挑选真正的住宅宽带 IP 做出口，Netflix、ChatGPT 看到的是家宽 IP；掉线自动换同国家节点。
+    details: 自动挑选真正的住宅宽带 IP 做出口，Netflix、ChatGPT 看到的是家宽 IP；掉线自动换同国家节点，完全免费。
     link: /features/residential
-  - icon: 🎬
-    title: WARP 与自定义分流
-    details: 接入 Cloudflare WARP，按域名、GeoSite 或订阅规则集把流量分到指定出口，其余照常直连。
-    link: /features/unlock
   - icon: 🔒
     title: 443 端口复用
     details: 多个节点共用一个 443 端口，靠域名分流；不认识的域名直接断开，扫描器探测不到。
@@ -65,11 +69,7 @@ features:
     details: psm migrate push root@新服务器，节点、密钥、证书原样搬过去，客户端不用改配置。
     link: /features/migrate
   - icon: 🩺
-    title: 自动诊断和修复
-    details: psm doctor --fix 检查服务、证书、开机自启和防火墙规则，能修的直接修好。
+    title: 诊断修复与安全加固
+    details: psm doctor --fix 检查并修好服务、证书、开机自启和防火墙；SSH 密钥登录、Fail2ban 防爆破、蜜罐诱捕，代理内核以非 root 运行。
     link: /features/doctor
-  - icon: 🔐
-    title: 服务器安全加固
-    details: SSH 密钥登录（带自动回滚）、Fail2ban 防爆破、蜜罐诱捕，代理内核以非 root 运行。
-    link: /features/security
 ---

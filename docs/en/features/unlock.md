@@ -8,7 +8,7 @@ keywords: WARP routing, unblock Netflix, unblock ChatGPT, routing rules, GeoSite
 
 Many streaming and AI services block datacenter IPs. PSM sends **only those services** out through a different exit; everything else leaves the VPS directly, at full speed.
 
-## Exits
+## Exits {#exits}
 
 **Cloudflare WARP** — registers a WARP account in one step and adds it as an outbound. Xray, sing-box and mihomo share the same WARP account.
 
@@ -16,7 +16,7 @@ Many streaming and AI services block datacenter IPs. PSM sends **only those serv
 
 **Your own outbound** — another node of yours (VLESS, Trojan, Shadowsocks, SOCKS5, …) can serve as an exit too.
 
-## Routing by rule
+## Routing by rule {#rules}
 
 Set rules under "Routing" in each core's menu:
 

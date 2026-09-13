@@ -8,7 +8,7 @@ keywords: WARP 分流, 解锁 Netflix, 解锁 ChatGPT, 分流规则, GeoSite, �
 
 很多流媒体和 AI 服务会拦截机房 IP。PSM 的做法是：**只把这些服务的流量**换一个出口，其余流量照常从 VPS 直接出去，速度不受影响。
 
-## 可选的出口
+## 可选的出口 {#exits}
 
 **Cloudflare WARP** — 一键注册 WARP 账号并接入内核出站。Xray、sing-box、mihomo 共用同一个 WARP 账号。
 
@@ -16,7 +16,7 @@ keywords: WARP 分流, 解锁 Netflix, 解锁 ChatGPT, 分流规则, GeoSite, �
 
 **自定义出站** — 你自己的其他节点（VLESS、Trojan、Shadowsocks、SOCKS5 等）也可以当出口。
 
-## 按规则分流
+## 按规则分流 {#rules}
 
 在各内核菜单的「路由分流管理」里设置规则：
 
