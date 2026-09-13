@@ -1,6 +1,7 @@
 ---
 title: "Choosing a proxy protocol: REALITY vs Hysteria2 vs TUIC vs AnyTLS"
 description: Which protocol should your self-hosted proxy use? VLESS REALITY, Vision, XHTTP, Hysteria2, TUIC, AnyTLS, Shadowsocks 2022, Trojan, Snell and WireGuard compared by transport, certificate needs, censorship resistance and use case, with recommended combinations.
+keywords: REALITY vs Hysteria2, proxy protocol comparison, TUIC, AnyTLS, censorship-resistant protocol
 ---
 
 # Choosing a protocol

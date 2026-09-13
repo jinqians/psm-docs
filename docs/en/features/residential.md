@@ -1,6 +1,7 @@
 ---
 title: "Free residential exit: unlock Netflix and ChatGPT with a home-broadband IP (VPNGate)"
 description: PSM picks genuine home-broadband IPs out of the public VPNGate list and opens a tunnel used only for routed traffic, so Netflix, ChatGPT and other services that check IP ownership see a residential exit. Free, fails over within the same country, and leaves the server's own network alone.
+keywords: free residential IP, residential proxy exit, VPNGate, unblock ChatGPT, unblock Netflix
 ---
 
 # Free residential exit

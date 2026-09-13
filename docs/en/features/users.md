@@ -1,6 +1,7 @@
 ---
 title: "Per-user accounts: expiry dates and traffic quotas for family and friends"
 description: PSM's psm user command adds users to Xray, sing-box and mihomo nodes, each with their own UUID and password, expiry date and subscription URL; Xray nodes support per-user monthly traffic quotas, and accounts pause when they expire or run out.
+keywords: multi-user proxy, per-user accounts, traffic limits, expiry dates
 ---
 
 # Per-user accounts

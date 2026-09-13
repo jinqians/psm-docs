@@ -1,6 +1,7 @@
 ---
 title: 一键安装 PSM
 description: 在 VPS 上一条命令安装 PSM 科学上网管理脚本。支持 Debian、Ubuntu、Alpine、RHEL / Rocky / AlmaLinux，x86_64 和 arm64。包含安装要求、Alpine 装法、手动安装、更新和卸载。
+keywords: PSM 安装, 一键安装脚本, Xray 安装, sing-box 安装, mihomo 安装, Alpine 安装
 head:
   - - script
     - type: application/ld+json

@@ -3,6 +3,7 @@ layout: home
 title: "PSM: one-command proxy server setup on a VPS (Xray, sing-box, mihomo)"
 titleTemplate: false
 description: PSM is an open-source script that installs Xray, sing-box and mihomo on a VPS in one command. REALITY, Hysteria2, Snell, Shadowsocks 2022, AnyTLS and TUIC nodes ready to use, with WARP routing, a free residential exit, custom routing, traffic monitoring and multi-user management.
+keywords: proxy server script, self-hosted VPN alternative, REALITY script, Hysteria2 script, sing-box script, Xray script, multi-user proxy, traffic monitoring
 
 hero:
   name: PSM

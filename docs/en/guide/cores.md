@@ -1,6 +1,7 @@
 ---
 title: "Xray vs sing-box vs mihomo: which core to use"
 description: PSM supports three proxy cores, Xray, sing-box and mihomo (Clash.Meta). Server protocols, special features and who each suits, to decide which one to install, or all three.
+keywords: Xray vs sing-box, mihomo server, Clash.Meta, proxy core comparison
 ---
 
 # Xray, sing-box or mihomo

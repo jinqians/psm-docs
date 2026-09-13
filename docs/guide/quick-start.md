@@ -1,6 +1,7 @@
 ---
 title: 1 分钟快速开始：在 VPS 上搭建第一个 VLESS REALITY 节点
 description: 手把手教你用 PSM 在 VPS 上搭建第一个科学上网节点：安装 PSM 和 Xray，创建 VLESS REALITY 节点，导出分享链接和二维码，导入 v2rayN、Shadowrocket、Clash Verge Rev 等客户端。
+keywords: VPS 搭建节点教程, REALITY 节点搭建, 科学上网教程, 自建梯子, v2rayN 导入, Shadowrocket 导入
 head:
   - - script
     - type: application/ld+json

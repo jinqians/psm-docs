@@ -1,6 +1,7 @@
 ---
 title: 解锁 Netflix、ChatGPT：WARP 出口、家宽 IP 出口与规则集分流
 description: VPS 机房 IP 看不了 Netflix、用不了 ChatGPT？PSM 可以接入 Cloudflare WARP 或住宅宽带（家宽）IP 出口，用规则集只把流媒体和 AI 服务的流量分过去，其余流量照常直连。
+keywords: WARP 分流, 解锁 Netflix, 解锁 ChatGPT, 分流规则, GeoSite, 规则集
 ---
 
 # 解锁 Netflix、ChatGPT

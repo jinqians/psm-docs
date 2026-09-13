@@ -1,6 +1,7 @@
 ---
 title: "Unlocking Netflix and ChatGPT: WARP, residential exits and rule sets"
 description: Datacenter IP blocked by Netflix or ChatGPT? PSM routes just those services through Cloudflare WARP or a residential broadband exit, by domain or subscribed rule set, while all other traffic leaves the VPS directly.
+keywords: WARP routing, unblock Netflix, unblock ChatGPT, routing rules, GeoSite, rule sets
 ---
 
 # Unlocking Netflix and ChatGPT

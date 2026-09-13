@@ -1,10 +1,11 @@
 ---
 title: 常见问题：VPS 搭建科学上网节点、协议选择、连不上怎么办
 description: PSM 常见问题：VPS 怎么搭建科学上网节点、需不需要域名、REALITY 和 Hysteria2 怎么选、节点连不上怎么排查、IP 被封怎么办、能不能给多人用、如何更新卸载。
+keywords: 节点连不上, IP 被封, 机场和自建的区别, 3x-ui 对比, x-ui 对比
 head:
   - - script
     - type: application/ld+json
-    - '{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"VPS 怎么搭建科学上网节点？","acceptedAnswer":{"@type":"Answer","text":"以 root 登录 VPS，执行 bash <(curl -fsSL https://psm.jinqians.com) 安装 PSM，运行 psm 安装 Xray，创建一个 VLESS REALITY 节点，把导出的链接或二维码导入客户端即可。"}},{"@type":"Question","name":"搭节点需要域名吗？","acceptedAnswer":{"@type":"Answer","text":"VLESS REALITY、Shadowsocks 2022 不需要域名和证书；Vision、Trojan、AnyTLS、Hysteria2、TUIC 需要证书，Hysteria2、TUIC、AnyTLS 可以用自签证书。"}},{"@type":"Question","name":"REALITY、Hysteria2、TUIC 该选哪个？","acceptedAnswer":{"@type":"Answer","text":"先用 VLESS REALITY 做主力；网络丢包严重时加 Hysteria2；再加 TUIC 或 AnyTLS 做备用。PSM 支持多个协议同时运行。"}},{"@type":"Question","name":"节点连不上怎么办？","acceptedAnswer":{"@type":"Answer","text":"先运行 psm doctor 检查服务和配置，psm doctor --fix 可以自动修复常见问题；再确认云服务商的安全组放行了节点端口，客户端链接里的 IP 和端口正确。"}},{"@type":"Question","name":"PSM 收费吗？","acceptedAnswer":{"@type":"Answer","text":"不收费。PSM 以 AGPL-3.0 协议开源，代码托管在 GitHub。"}},{"@type":"Question","name":"PSM 支持哪些系统？","acceptedAnswer":{"@type":"Answer","text":"Debian、Ubuntu、Alpine 和 RHEL / CentOS / Rocky Linux / AlmaLinux 等 Red Hat 系，x86_64 和 arm64，需要 root 权限。"}}]}'
+    - '{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"VPS 怎么搭建科学上网节点？","acceptedAnswer":{"@type":"Answer","text":"以 root 登录 VPS，执行 bash <(curl -fsSL https://psm.jinqians.com) 安装 PSM，运行 psm 安装 Xray，创建一个 VLESS REALITY 节点，把导出的链接或二维码导入客户端即可。"}},{"@type":"Question","name":"搭节点需要域名吗？","acceptedAnswer":{"@type":"Answer","text":"VLESS REALITY、Shadowsocks 2022 不需要域名和证书；Vision、Trojan、AnyTLS、Hysteria2、TUIC 需要证书，Hysteria2、TUIC、AnyTLS 可以用自签证书。"}},{"@type":"Question","name":"REALITY、Hysteria2、TUIC 该选哪个？","acceptedAnswer":{"@type":"Answer","text":"先用 VLESS REALITY 做主力；网络丢包严重时加 Hysteria2；再加 TUIC 或 AnyTLS 做备用。PSM 支持多个协议同时运行。"}},{"@type":"Question","name":"节点连不上怎么办？","acceptedAnswer":{"@type":"Answer","text":"先运行 psm doctor 检查服务和配置，psm doctor --fix 可以自动修复常见问题；再确认云服务商的安全组放行了节点端口，客户端链接里的 IP 和端口正确。"}},{"@type":"Question","name":"PSM 收费吗？","acceptedAnswer":{"@type":"Answer","text":"不收费。PSM 以 AGPL-3.0 协议开源，代码托管在 GitHub。"}},{"@type":"Question","name":"PSM 支持哪些系统？","acceptedAnswer":{"@type":"Answer","text":"Debian、Ubuntu、Alpine 和 RHEL / CentOS / Rocky Linux / AlmaLinux 等 Red Hat 系，x86_64 和 arm64，需要 root 权限。"}},{"@type":"Question","name":"自建节点和买机场有什么区别？","acceptedAnswer":{"@type":"Answer","text":"机场是多人共用的商业代理服务，买来即用，但 IP 与大量用户共享，更容易被流媒体和 AI 服务限制，服务质量取决于服务商。自建节点用自己租的 VPS，IP 只有自己和分享的人在用，配置自己掌握，代价是要付 VPS 费用并维护服务器；PSM 把安装、更新、诊断、迁移做成了菜单和命令。"}},{"@type":"Question","name":"PSM 和 x-ui、3x-ui 这类网页面板有什么区别？","acceptedAnswer":{"@type":"Answer","text":"x-ui / 3x-ui 是 Xray 的网页管理面板，需要对外开放面板端口。PSM 是 SSH 里的命令行菜单，不开放管理端口，同时管理 Xray、sing-box、mihomo 三个内核，以及 Nginx 443 复用、证书、防火墙、SSH 加固、诊断修复和整机迁移。"}}]}'
 ---
 
 # 常见问题
@@ -75,6 +76,18 @@ PSM 只管理自己的站点和 443 分流配置。服务器上已有重要网�
 ## 怎么切换界面语言？ {#language}
 
 主菜单「语言 / Language」，支持简体中文、English、한국어、Русский；也可以 `PSM_LANG=en psm` 临时切换。
+
+## 自建节点和买机场有什么区别？ {#vs-airport}
+
+机场是多人共用的商业代理服务，买来即用、节点多，但 IP 与大量用户共享，更容易被流媒体和 AI 服务限制，服务质量和稳定性取决于服务商。
+
+自建节点用的是你自己租的 VPS：IP 只有你和你分享的人在用，协议、分流和出口都由自己决定。代价是要付 VPS 的钱，并自己维护服务器。PSM 把安装、更新、[诊断修复](/features/doctor)和[换服务器](/features/migrate)这些维护工作做成了菜单和命令。常见名词见[术语表](/guide/glossary)。
+
+## PSM 和 x-ui、3x-ui 这类网页面板有什么区别？ {#vs-panel}
+
+x-ui / 3x-ui 是 Xray 的网页管理面板，在浏览器里操作，需要对外开放一个面板端口。
+
+PSM 是 SSH 里的命令行菜单，不开放任何管理端口。它同时管理 Xray、sing-box、mihomo 三个内核，还负责 [443 端口复用](/features/port-443)、证书、防火墙、[SSH 加固](/features/security)、诊断修复和整机迁移。习惯网页操作可以选面板；想让一台服务器从安装到长期维护都交给一个工具，选 PSM。
 
 ## PSM 收费吗？ {#free}
 

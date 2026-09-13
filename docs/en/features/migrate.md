@@ -1,6 +1,7 @@
 ---
 title: "Move your proxy server to a new VPS in one command"
 description: psm migrate push moves a whole proxy server to a new VPS, with nodes, keys, UUIDs, certificates, acme.sh, Nginx port 443 routing, subscriptions and user accounts unchanged, so clients keep working. Encrypted export and import work too.
+keywords: migrate VPS, move proxy server, server migration
 ---
 
 # Moving to a new server

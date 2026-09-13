@@ -1,6 +1,7 @@
 ---
 title: "Traffic quotas and expiry: per-node limits that pause automatically"
 description: PSM counts the traffic of every Xray, sing-box and mihomo node, sets monthly quotas, warns at 90% on Telegram and pauses a node when it runs out; nodes can also have expiry dates with reminders, automatic pausing and one-step renewal.
+keywords: traffic monitoring, traffic quota, Telegram alerts
 ---
 
 # Traffic quotas and expiry

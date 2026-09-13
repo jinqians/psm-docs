@@ -1,6 +1,7 @@
 ---
 title: "Sharing port 443: many proxy nodes behind one port"
 description: PSM routes TLS connections by SNI with Nginx stream ssl_preread, so REALITY, Vision, XHTTP and AnyTLS nodes and a camouflage website share public port 443, and unknown names are dropped. Hysteria2 can use port hopping.
+keywords: port 443 sharing, SNI routing, Nginx stream, Hysteria2 port hopping
 ---
 
 # Sharing port 443

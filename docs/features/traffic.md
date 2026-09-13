@@ -1,6 +1,7 @@
 ---
 title: 流量配额与到期管理：按节点限流量、到期自动停用
 description: PSM 统计 Xray、sing-box、mihomo 每个节点的流量，按月设置流量配额，达到 90% 用 Telegram 提醒，用满自动暂停；节点可设置到期时间，临期提醒、到期停用、一键续期。
+keywords: 流量监控, 流量配额, Telegram 通知, 到期停用
 ---
 
 # 流量配额与到期

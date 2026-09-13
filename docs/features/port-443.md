@@ -1,6 +1,7 @@
 ---
 title: 443 端口复用：多个节点共用一个 443 端口
 description: PSM 用 Nginx stream 的 ssl_preread 按 SNI 分流，让 REALITY、Vision、XHTTP、AnyTLS 等多个节点和伪装网站共用公网 443 端口，未知域名直接断开。Hysteria2 可开端口跳跃。
+keywords: 443 端口复用, SNI 分流, Nginx stream, Hysteria2 端口跳跃
 ---
 
 # 443 端口复用

@@ -1,6 +1,7 @@
 ---
 title: 免费家宽出口：用住宅宽带 IP 解锁 Netflix、ChatGPT（VPNGate）
 description: PSM 可以从 VPNGate 公开节点里自动挑出真正的家庭宽带 IP，拉一条只给分流流量用的隧道，让 Netflix、ChatGPT 等看 IP 归属的服务看到住宅宽带出口；免费、掉线自动换同国家节点、不影响服务器本身的网络。
+keywords: 免费家宽 IP, 住宅 IP 出口, 家宽落地, VPNGate, 解锁 ChatGPT, 解锁 Netflix
 ---
 
 # 免费家宽出口

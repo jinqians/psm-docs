@@ -3,6 +3,7 @@ layout: home
 title: PSM：VPS 科学上网一键脚本，Xray / sing-box / mihomo 三内核
 titleTemplate: false
 description: PSM 是开源的 VPS 科学上网一键管理脚本。一键安装 Xray、sing-box、mihomo，REALITY、Hysteria2、Snell、Shadowsocks 2022、AnyTLS、TUIC 节点即建即用，支持 WARP 分流、免费家宽出口、自定义分流、流量监控和多用户管理。
+keywords: 科学上网一键脚本, VPS 翻墙脚本, 自建节点教程, REALITY 一键脚本, Hysteria2 一键脚本, sing-box 一键脚本, Xray 一键脚本, 多用户, 流量监控
 
 hero:
   name: PSM

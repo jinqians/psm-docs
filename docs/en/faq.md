@@ -1,10 +1,11 @@
 ---
 title: "FAQ: setting up a proxy server on a VPS, protocols, troubleshooting"
 description: PSM FAQ. How to set up a proxy server on a VPS, whether you need a domain, REALITY vs Hysteria2, what to check when a node does not connect, what to do when the IP is blocked, sharing with several people, updating and uninstalling.
+keywords: proxy not connecting, IP blocked, self-hosted vs proxy subscription, 3x-ui alternative, x-ui alternative
 head:
   - - script
     - type: application/ld+json
-    - '{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How do I set up a proxy server on a VPS?","acceptedAnswer":{"@type":"Answer","text":"Log in to the VPS as root, install PSM with bash <(curl -fsSL https://psm.jinqians.com), run psm to install Xray, create a VLESS REALITY node, and import its share link or QR code into a client."}},{"@type":"Question","name":"Do I need a domain?","acceptedAnswer":{"@type":"Answer","text":"Not for VLESS REALITY or Shadowsocks 2022. Vision and Trojan need a certificate for a domain; Hysteria2, TUIC and AnyTLS need a certificate but a self-signed one works."}},{"@type":"Question","name":"REALITY, Hysteria2 or TUIC?","acceptedAnswer":{"@type":"Answer","text":"Use VLESS REALITY as the main line, add Hysteria2 for lossy networks, and TUIC or AnyTLS as a spare. PSM runs them side by side."}},{"@type":"Question","name":"My node does not connect. What should I check?","acceptedAnswer":{"@type":"Answer","text":"Run psm doctor (psm doctor --fix repairs common problems), make sure your cloud provider security group allows the node port, and check the IP and port in the client link."}},{"@type":"Question","name":"Is PSM free?","acceptedAnswer":{"@type":"Answer","text":"Yes. PSM is open source under AGPL-3.0 and hosted on GitHub."}},{"@type":"Question","name":"Which systems does PSM support?","acceptedAnswer":{"@type":"Answer","text":"Debian, Ubuntu, Alpine and the Red Hat family (RHEL, CentOS, Rocky Linux, AlmaLinux), on x86_64 and arm64, with root access."}}]}'
+    - '{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How do I set up a proxy server on a VPS?","acceptedAnswer":{"@type":"Answer","text":"Log in to the VPS as root, install PSM with bash <(curl -fsSL https://psm.jinqians.com), run psm to install Xray, create a VLESS REALITY node, and import its share link or QR code into a client."}},{"@type":"Question","name":"Do I need a domain?","acceptedAnswer":{"@type":"Answer","text":"Not for VLESS REALITY or Shadowsocks 2022. Vision and Trojan need a certificate for a domain; Hysteria2, TUIC and AnyTLS need a certificate but a self-signed one works."}},{"@type":"Question","name":"REALITY, Hysteria2 or TUIC?","acceptedAnswer":{"@type":"Answer","text":"Use VLESS REALITY as the main line, add Hysteria2 for lossy networks, and TUIC or AnyTLS as a spare. PSM runs them side by side."}},{"@type":"Question","name":"My node does not connect. What should I check?","acceptedAnswer":{"@type":"Answer","text":"Run psm doctor (psm doctor --fix repairs common problems), make sure your cloud provider security group allows the node port, and check the IP and port in the client link."}},{"@type":"Question","name":"Is PSM free?","acceptedAnswer":{"@type":"Answer","text":"Yes. PSM is open source under AGPL-3.0 and hosted on GitHub."}},{"@type":"Question","name":"Which systems does PSM support?","acceptedAnswer":{"@type":"Answer","text":"Debian, Ubuntu, Alpine and the Red Hat family (RHEL, CentOS, Rocky Linux, AlmaLinux), on x86_64 and arm64, with root access."}},{"@type":"Question","name":"Self-hosting or a commercial proxy subscription?","acceptedAnswer":{"@type":"Answer","text":"A commercial proxy subscription is shared by many users: ready to use, but its IPs are shared and more often restricted by streaming and AI services, and quality depends on the provider. A self-hosted proxy runs on a VPS you rent: the IP is used only by you and the people you share it with, and you control the setup; the cost is the VPS and maintaining it, which PSM turns into a menu and commands."}},{"@type":"Question","name":"How is PSM different from web panels such as x-ui or 3x-ui?","acceptedAnswer":{"@type":"Answer","text":"x-ui and 3x-ui are web panels for Xray and expose a panel port. PSM is a menu over SSH with no management port exposed, and manages Xray, sing-box and mihomo together, plus Nginx port 443 sharing, certificates, the firewall, SSH hardening, diagnosis and repair, and server migration."}}]}'
 ---
 
 # FAQ
@@ -75,6 +76,18 @@ Not at the moment. PSM manages one server at a time and has no multi-server pane
 ## How do I change the interface language? {#language}
 
 "Language" in the main menu: Simplified Chinese, English, Korean or Russian; `PSM_LANG=en psm` switches for one session.
+
+## Self-hosting or a commercial proxy subscription? {#vs-airport}
+
+A commercial proxy subscription (an "airport" in Chinese communities) is shared by many users. It is ready to use and has many nodes, but its IPs are shared, so streaming and AI services restrict them more often, and quality and stability depend on the provider.
+
+A self-hosted proxy runs on a VPS you rent: the IP is used only by you and the people you share it with, and you choose the protocols, routing and exits. The cost is the VPS and maintaining the server. PSM turns that maintenance, installing, updating, [diagnosis and repair](/en/features/doctor) and [moving servers](/en/features/migrate), into a menu and commands. The terms are explained in the [glossary](/en/guide/glossary).
+
+## How is PSM different from web panels such as x-ui or 3x-ui? {#vs-panel}
+
+x-ui and 3x-ui are web panels for Xray: you work in a browser, and a panel port is exposed to the internet.
+
+PSM is a menu over SSH and exposes no management port. It manages Xray, sing-box and mihomo together, and also takes care of [port 443 sharing](/en/features/port-443), certificates, the firewall, [SSH hardening](/en/features/security), diagnosis and repair, and server migration. If you prefer a browser, a panel suits you; if you want one tool to install and then look after the whole server, choose PSM.
 
 ## Is PSM free? {#free}
 

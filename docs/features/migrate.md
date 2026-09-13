@@ -1,6 +1,7 @@
 ---
 title: 一键迁移服务器：换 VPS 不用重新搭节点
 description: 用 psm migrate push 把整台代理服务器搬到新 VPS：节点、密钥、UUID、证书、acme.sh、Nginx 443 分流、订阅和多用户原样迁移，客户端不用改。也可以导出加密迁移包再导入。
+keywords: VPS 迁移, 换服务器, 节点迁移, 搬家
 ---
 
 # 一键迁移服务器

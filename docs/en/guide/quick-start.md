@@ -1,6 +1,7 @@
 ---
 title: "Quick start: your first VLESS REALITY node on a VPS in 1 minute"
 description: Step by step, set up your first proxy node with PSM. Install PSM and Xray, create a VLESS REALITY node, export its share link and QR code, and import it into v2rayN, Shadowrocket, Clash Verge Rev or another client.
+keywords: set up proxy on VPS, VLESS REALITY tutorial, self-hosted proxy tutorial, v2rayN import
 head:
   - - script
     - type: application/ld+json

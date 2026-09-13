@@ -1,6 +1,7 @@
 ---
 title: 多用户：给家人朋友分账号，设到期时间和流量配额
 description: PSM 的 psm user 命令为 Xray、sing-box、mihomo 节点添加多个用户：每人独立的 UUID 和密码、到期时间、独立订阅地址，Xray 节点支持按用户的月流量配额，到期或超额自动停用。
+keywords: 多用户, 分账号, 流量限制, 到期时间, 订阅分发
 ---
 
 # 多用户

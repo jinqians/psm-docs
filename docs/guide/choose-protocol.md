@@ -1,6 +1,7 @@
 ---
 title: 科学上网协议怎么选：REALITY、Hysteria2、TUIC、AnyTLS 对比
 description: 自建节点该用什么协议？对比 VLESS REALITY、Vision、XHTTP、Hysteria2、TUIC、AnyTLS、Shadowsocks 2022、Trojan、Snell、WireGuard 的传输方式、是否需要域名证书、抗封锁能力和适用场景，给出按网络环境的推荐组合。
+keywords: REALITY 和 Hysteria2 哪个好, 科学上网协议对比, 翻墙协议推荐, TUIC, AnyTLS, 抗封锁协议
 ---
 
 # 协议怎么选

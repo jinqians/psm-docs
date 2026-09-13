@@ -1,6 +1,7 @@
 ---
 title: Xray、sing-box、mihomo 有什么区别，该用哪个
 description: PSM 同时支持 Xray、sing-box、mihomo（Clash.Meta）三个代理内核。对比三者支持的服务端协议、特色功能和适用人群，帮你决定装哪一个，或三个都装。
+keywords: Xray 和 sing-box 区别, mihomo 服务端, Clash.Meta, 代理内核对比
 ---
 
 # Xray、sing-box、mihomo 怎么选

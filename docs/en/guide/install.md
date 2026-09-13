@@ -1,6 +1,7 @@
 ---
 title: Install PSM
 description: Install PSM on a VPS with one command. Debian, Ubuntu, Alpine and RHEL / Rocky / AlmaLinux on x86_64 and arm64. Requirements, Alpine, manual install, updating and uninstalling.
+keywords: install PSM, one-command install, install Xray, install sing-box, install mihomo
 head:
   - - script
     - type: application/ld+json
