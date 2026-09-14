@@ -1,6 +1,6 @@
 ---
-title: "PSM CLI reference: psm node, user, migrate, doctor"
-description: Every PSM command-line command. psm node to list, add, update, delete and export nodes (REALITY, Hysteria2, TUIC, AnyTLS options, port 443 sharing, port hopping), psm user for accounts, psm migrate, psm doctor, and the scheduled-job entry points.
+title: "PSM CLI reference: psm node, core, standalone, traffic, agent, user, migrate, doctor"
+description: Every PSM command-line command. psm node to list, add, update, delete and export nodes (REALITY, Hysteria2, TUIC, AnyTLS options, port 443 sharing, port hopping), psm core to install a core without questions, psm standalone for standalone Snell v4/v5/v6 and ss-rust, psm traffic for metering and limits, psm agent to join a PSM Panel, psm user for accounts, psm migrate, psm doctor, and the scheduled-job entry points.
 ---
 
 # CLI reference
@@ -15,10 +15,10 @@ psm node show CORE PROTO TAG [--json] [--show-secrets]
 psm node add CORE PROTO [--tag TAG] [--port PORT] [protocol options…] [--json]
 psm node update CORE PROTO TAG [options to change…] [--json]
 psm node delete CORE PROTO TAG --yes
-psm node export CORE PROTO TAG [--server HOST] [--format uri|json|surge]
+psm node export CORE PROTO TAG [--server HOST] [--format uri|json|surge|singbox]
 ```
 
-`CORE` is `xray`, `sing-box` (or `singbox`) or `mihomo`.
+`CORE` is `xray`, `sing-box` (or `singbox`) or `mihomo`. `--format singbox` prints the node as a sing-box client outbound (JSON).
 
 | Core | Protocols |
 | --- | --- |
@@ -52,6 +52,60 @@ Other options:
 - `--skip-dest-probe`: skip the real handshake test of a REALITY target before creating the node.
 - Queries hide keys and passwords unless `--show-secrets` is given; `export` includes the credentials clients need.
 - A change the core rejects is rolled back, node record and live config alike.
+
+## psm core: installing a core
+
+```bash
+psm core list [--json]
+psm core install xray|sing-box|mihomo [--if-missing] [--json]
+```
+
+Installs a core without questions (the latest stable release and its service), skipping the menu's wizard. `--if-missing` does nothing when it is installed. [PSM Panel](/en/features/panel) uses it before a server's first node on that core.
+
+## psm standalone: standalone Snell and ss-rust
+
+```bash
+psm standalone install snell  --port PORT [--psk PSK] [--version 4|5|6] [--json]
+psm standalone install ss2022 --port PORT [--password KEY] [--method METHOD] [--json]
+psm standalone show    snell|ss2022 [--json]
+psm standalone export  snell|ss2022 [--server HOST] [--name NAME] [--format uri|surge|singbox]
+psm standalone remove  snell|ss2022 --yes [--json]
+```
+
+Installs the official snell-server (v4, v5 or v6: the newest official build of that major version; v6 is still a beta upstream, so its newest beta or release candidate) or ss-rust without questions, on systemd and OpenRC, into the same config files the menus use, so the menus, traffic metering and subscription exports see them as before. Running `install` again replaces what is running (a new port or key).
+
+- ss2022 `--method`: `2022-blake3-aes-128-gcm` (default), `2022-blake3-aes-256-gcm`, `2022-blake3-chacha20-poly1305`; `--password` is the base64 key (16 bytes for aes-128, 32 for the others). The PSK and key are generated when not given.
+- `export`: a Surge line for Snell; an `ss://` link for ss2022 (`--format surge` for a Surge line, `singbox` for a sing-box outbound).
+- The official snell-server does not run on musl (Alpine): it is refused there with that reason; run Snell on sing-box or mihomo on Alpine.
+
+## psm traffic: metering and limits
+
+```bash
+psm traffic list [--json]
+psm traffic set TAG [--limit-bytes N | --limit-gb N] [--reset-day 1-28] [--json]
+psm traffic reset TAG [--json]
+psm traffic unset TAG [--json]
+```
+
+`TAG` is a node's name, or `snell` / `ss2022` for the standalone servers (as in the traffic menu: both work on the same state).
+
+- `set` enrols a node and sets its limit; a limit of 0 meters without limiting. The first `set` installs the every-minute check.
+- A node over its limit is paused until the monthly reset day or `psm traffic reset`; raising the limit also lifts the pause.
+- `list` brings the counters up to date first.
+
+## psm agent: joining a PSM Panel
+
+```bash
+psm agent join --panel URL --token TOKEN
+psm agent status [--json]
+psm agent remove --yes
+```
+
+`join` downloads psm-agent (checked against the release's SHA256SUMS), joins the panel with its one-time token and runs it as a service. psm-agent listens on no port. Usually you run the install command the panel gives you (it installs or updates PSM first, then calls `psm agent join`); see [PSM Panel](/en/features/panel). `remove` disconnects from the panel and deletes psm-agent; the nodes stay.
+
+## psm version
+
+Prints PSM's version (the date and commit of the checkout).
 
 ## psm user: accounts
 

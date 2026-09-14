@@ -12,7 +12,7 @@ Snell 是 Surge 团队开发的代理协议，Surge 原生支持，不需要域�
 | --- | --- | --- |
 | sing-box 节点 | v5、v6 | 推荐；需要 sing-box 1.14 及以上，PSM 默认安装的版本已满足 |
 | mihomo 节点 | v4、v5 | 可以加一层 ShadowTLS |
-| 独立版 snell-server | 官方版本 | 主菜单 **5. Snell 管理**，运行官方安装脚本；Alpine 上通过 Docker 运行 |
+| 独立版 snell-server | v4、v5、v6 | 主菜单 **5. Snell 管理**，运行官方安装脚本；或用命令行 `psm standalone`、[PSM Panel](/features/panel) 不交互安装；Alpine 上菜单通过 Docker 运行 |
 
 
 ## 独立版 snell-server（推荐）
@@ -32,6 +32,18 @@ Snell 是 Surge 团队开发的代理协议，Surge 原生支持，不需要域�
 注意：PSM 的流量统计目前只统计主用户的端口，多用户管理里另外添加的端口不在统计范围内。
 
 官方 snell-server 不支持 musl，所以在 Alpine 上 PSM 会用 Docker 运行它（会先询问是否安装 Docker）。在 Alpine 上也可以直接用 sing-box 或 mihomo 的 Snell 节点。
+
+### 命令行安装（v4 / v5 / v6）
+
+不想走交互菜单时，用 `psm standalone` 一条命令装好官方 snell-server，指定版本、端口和 PSK：
+
+```bash
+psm standalone install snell --port 6160 --version 5 --psk 你的PSK   # PSK 不填自动生成
+psm standalone export snell --server 你的IP --name 香港Snell          # Surge 配置行
+psm standalone remove snell --yes
+```
+
+`--version` 可选 4、5、6，安装这个大版本最新的官方构建（v6 上游仍是测试版，装最新的测试版或候选版）。配置写在菜单使用的同一个文件里，菜单的显示配置、流量管理照常可用。[PSM Panel](/features/panel) 里选"独立安装"的 Snell 节点也是这样装的。命令行安装不支持 Alpine（官方程序不能在 musl 上运行）。
 
 ## 用 sing-box 或 mihomo 创建
 

@@ -85,6 +85,7 @@ const zhSidebar: Group[] = [
   {
     text: '功能',
     items: [
+      { text: 'PSM Panel 网页面板', link: '/features/panel' },
       { text: '443 端口复用', link: '/features/port-443' },
       { text: '订阅与客户端导入', link: '/features/subscription' },
       { text: '多用户', link: '/features/users' },
@@ -146,6 +147,7 @@ const enSidebar: Group[] = [
   {
     text: 'Features',
     items: [
+      { text: 'PSM Panel (web panel)', link: '/en/features/panel' },
       { text: 'Sharing port 443', link: '/en/features/port-443' },
       { text: 'Subscriptions and clients', link: '/en/features/subscription' },
       { text: 'Per-user accounts', link: '/en/features/users' },

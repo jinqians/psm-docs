@@ -20,6 +20,21 @@ Set a monthly limit for a node in main menu **15 (Traffic)**:
 
 To limit a person rather than a node, use the `--quota` of [per-user accounts](/en/features/users) (counts Xray nodes).
 
+### From the command line
+
+```bash
+psm traffic set NODE --limit-gb 100 --reset-day 1   # set a limit (0 meters without limiting)
+psm traffic list                                    # usage, limits, paused or not
+psm traffic reset NODE                              # back to zero, resumed
+psm traffic unset NODE                              # stop metering it
+```
+
+The standalone Snell and ss-rust are `snell` and `ss2022`. The command line and the menu work on the same state. All options: [CLI reference](/en/reference/cli#psm-traffic-metering-and-limits).
+
+### On PSM Panel
+
+A server joined to [PSM Panel](/en/features/panel) reports every node's traffic to the panel: its traffic page shows this month's usage of every server and a daily chart, and a limit is set when creating or editing a node. Pausing and resetting are still done by the server itself.
+
 ## Expiry dates
 
 Give a node an expiry date, handy when you lend access for a while:

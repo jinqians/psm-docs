@@ -10,7 +10,7 @@ Snell is the Surge team's proxy protocol, built into Surge, with no domain or ce
 
 | Way | Versions | Notes |
 | --- | --- | --- |
-| Standalone snell-server | official releases | recommended; main menu **5 (Snell)** runs the official installer; on Alpine it runs in Docker |
+| Standalone snell-server | v4, v5, v6 | recommended; main menu **5 (Snell)** runs the official installer, or `psm standalone` and [PSM Panel](/en/features/panel) install it without questions; on Alpine the menu runs it in Docker |
 | sing-box node | v5, v6 | needs sing-box 1.14 or later, which PSM installs by default |
 | mihomo node | v4, v5 | can add a ShadowTLS layer |
 
@@ -31,6 +31,18 @@ Choose **5 (Snell)** in the main menu:
 Note: PSM's traffic accounting currently counts only the main user's port; ports added under multi-user management are not counted.
 
 The official snell-server does not run on musl, so on Alpine PSM runs it in Docker (asking first whether to install Docker).
+
+### From the command line (v4 / v5 / v6)
+
+To skip the interactive menu, `psm standalone` installs the official snell-server with one command, with the version, port and PSK you choose:
+
+```bash
+psm standalone install snell --port 6160 --version 5 --psk YOUR_PSK   # PSK generated when left out
+psm standalone export snell --server YOUR_IP --name hk-snell           # Surge line
+psm standalone remove snell --yes
+```
+
+`--version` is 4, 5 or 6 and installs the newest official build of that major version (v6 is still a beta upstream: its newest beta or release candidate). The config goes into the same file the menu uses, so the menu's show-config and traffic screens keep working. Standalone Snell nodes made in [PSM Panel](/en/features/panel) are installed this way. Not on Alpine (the official program does not run on musl).
 
 ## On sing-box or mihomo
 

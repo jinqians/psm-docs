@@ -1,6 +1,6 @@
 ---
-title: PSM 命令参考：psm node / user / migrate / doctor
-description: PSM 全部命令行用法：psm node 增删改查导出节点（REALITY、Hysteria2、TUIC、AnyTLS 等协议参数、443 复用、端口跳跃）、psm user 多用户、psm migrate 迁移、psm doctor 诊断，以及定时任务入口。
+title: PSM 命令参考：psm node / core / standalone / traffic / agent / user / migrate / doctor
+description: PSM 全部命令行用法：psm node 增删改查导出节点（REALITY、Hysteria2、TUIC、AnyTLS 等协议参数、443 复用、端口跳跃）、psm core 不交互安装内核、psm standalone 独立 Snell v4/v5/v6 与 ss-rust、psm traffic 流量统计与限额、psm agent 接入 PSM Panel、psm user 多用户、psm migrate 迁移、psm doctor 诊断，以及定时任务入口。
 ---
 
 # 命令参考
@@ -15,10 +15,10 @@ psm node show CORE PROTO TAG [--json] [--show-secrets]
 psm node add CORE PROTO [--tag TAG] [--port PORT] [协议参数…] [--json]
 psm node update CORE PROTO TAG [要修改的参数…] [--json]
 psm node delete CORE PROTO TAG --yes
-psm node export CORE PROTO TAG [--server HOST] [--format uri|json|surge]
+psm node export CORE PROTO TAG [--server HOST] [--format uri|json|surge|singbox]
 ```
 
-`CORE` 是 `xray`、`sing-box`（也可写 `singbox`）或 `mihomo`。
+`CORE` 是 `xray`、`sing-box`（也可写 `singbox`）或 `mihomo`。`--format singbox` 输出这个节点的 sing-box 客户端 outbound（JSON）。
 
 | 内核 | 协议 |
 | --- | --- |
@@ -52,6 +52,60 @@ psm node export CORE PROTO TAG [--server HOST] [--format uri|json|surge]
 - `--skip-dest-probe`：跳过创建前对 REALITY 伪装目标的真实握手测试。
 - 查询默认隐藏密钥和密码，`--show-secrets` 显示；`export` 会包含客户端需要的凭据。
 - 应用失败会自动回滚节点记录和内核配置。
+
+## psm core：安装内核
+
+```bash
+psm core list [--json]
+psm core install xray|sing-box|mihomo [--if-missing] [--json]
+```
+
+不交互地安装内核（最新稳定版和它的服务），不经过菜单向导。`--if-missing` 已安装时什么也不做。[PSM Panel](/features/panel) 在服务器上建第一个某内核的节点前就是用它装内核的。
+
+## psm standalone：独立 Snell 和 ss-rust
+
+```bash
+psm standalone install snell  --port PORT [--psk PSK] [--version 4|5|6] [--json]
+psm standalone install ss2022 --port PORT [--password KEY] [--method METHOD] [--json]
+psm standalone show    snell|ss2022 [--json]
+psm standalone export  snell|ss2022 [--server HOST] [--name NAME] [--format uri|surge|singbox]
+psm standalone remove  snell|ss2022 --yes [--json]
+```
+
+不交互地安装官方 snell-server（v4、v5 或 v6，装这个大版本最新的官方构建；v6 上游仍是测试版，装最新的测试版或候选版）或 ss-rust，systemd 和 OpenRC 都支持，写入菜单用的同一份配置，所以菜单、流量统计和订阅导出照常识别。再次 `install` 会替换正在运行的配置（换端口、换密钥）。
+
+- ss2022 的 `--method`：`2022-blake3-aes-128-gcm`（默认）、`2022-blake3-aes-256-gcm`、`2022-blake3-chacha20-poly1305`；`--password` 是 base64 密钥（aes-128 为 16 字节，其余 32 字节）。PSK 和密钥不填时自动生成。
+- `export`：Snell 输出 Surge 配置行；ss2022 输出 `ss://` 链接（`--format surge` 为 Surge 配置行，`singbox` 为 sing-box outbound）。
+- 官方 snell-server 不能在 musl（Alpine）上运行，那里会直接拒绝并说明原因；Alpine 上请用 sing-box 或 mihomo 运行 Snell。
+
+## psm traffic：流量统计和限额
+
+```bash
+psm traffic list [--json]
+psm traffic set TAG [--limit-bytes N | --limit-gb N] [--reset-day 1-28] [--json]
+psm traffic reset TAG [--json]
+psm traffic unset TAG [--json]
+```
+
+`TAG` 是节点名，独立安装的 Snell、ss-rust 分别是 `snell`、`ss2022`（与流量管理菜单相同，两边操作的是同一份数据）。
+
+- `set` 登记节点并设置上限；上限 0 表示只统计、不限制。第一次 `set` 会装好每分钟一次的检查。
+- 超过上限的节点被暂停，到每月重置日或 `psm traffic reset` 后恢复；提高上限也会解除暂停。
+- `list` 先刷新计数再输出。
+
+## psm agent：接入 PSM Panel
+
+```bash
+psm agent join --panel URL --token TOKEN
+psm agent status [--json]
+psm agent remove --yes
+```
+
+`join` 下载 psm-agent（用发布页的 SHA256SUMS 校验），用面板给的一次性令牌接入，并作为服务运行。psm-agent 不监听任何端口。一般直接执行面板给出的安装命令即可（它会先装好或更新 PSM，再调用 `psm agent join`），见 [PSM Panel](/features/panel)。`remove` 断开面板并删除 psm-agent，节点保留。
+
+## psm version
+
+输出 PSM 的版本（检出的日期和提交号）。
 
 ## psm user：多用户
 

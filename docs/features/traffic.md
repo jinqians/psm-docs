@@ -20,6 +20,21 @@ keywords: 流量监控, 流量配额, Telegram 通知, 到期停用
 
 想按"人"而不是按"节点"限流量，用 [多用户](/features/users) 的 `--quota`（统计 Xray 节点）。
 
+### 命令行
+
+```bash
+psm traffic set 节点名 --limit-gb 100 --reset-day 1   # 设置上限（0 表示只统计、不限制）
+psm traffic list                                    # 用量、上限、是否暂停
+psm traffic reset 节点名                             # 清零并恢复
+psm traffic unset 节点名                             # 不再统计
+```
+
+独立安装的 Snell、ss-rust 分别叫 `snell`、`ss2022`。命令行和菜单操作的是同一份数据。完整参数见 [命令参考](/reference/cli#psm-traffic-流量统计和限额)。
+
+### 在 PSM Panel 上看
+
+接入 [PSM Panel](/features/panel) 的服务器会把每个节点的流量报给面板：面板的流量页显示所有服务器的本月用量和每日图表，新建或编辑节点时填流量上限即可，超额暂停和重置仍由服务器自己执行。
+
 ## 到期管理
 
 给节点设一个到期时间，适合临时借给别人用：
