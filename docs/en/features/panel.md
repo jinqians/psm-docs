@@ -13,7 +13,9 @@ PSM Panel is PSM's web panel, laid out like Xboard, for managing many VPS on one
 - **psm-agent on the server listens on no port**: it connects out to the panel over HTTPS.
 - **Create, edit and delete nodes** on the page; Snell and SS2022 can run as the standalone snell-server (v4 / v5 / v6) and ss-rust.
 - **Traffic**: each node's usage this month, a daily chart, limits (a node over its limit is paused).
-- **One subscription** for the nodes of every server: share links, Clash / mihomo, sing-box and Surge, chosen by the client.
+- **One subscription** for the nodes of every server: share links, Clash / mihomo, Stash, sing-box, Surge, Quantumult X and Loon, chosen by the client; every format has a built-in template with basic routing, and you can write your own.
+- **An exit per node**: a node's AI traffic, its streaming traffic or all of it can leave through Cloudflare WARP or a free residential line (VPNGate); the rest goes out directly.
+- **REALITY camouflage targets found for you**: with a cyberspace-mapping engine's API key (Netlas, Quake, ZoomEye or FOFA), the server lists hosts with certificates in its own ASN, checks each with a TLS handshake, and the panel fills your choice in.
 - **Diagnostics**: a server's PSM version, cores and `psm doctor` results at a click.
 
 A joined server keeps working with PSM's menu and command line as before.

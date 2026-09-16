@@ -15,10 +15,17 @@ psm node show CORE PROTO TAG [--json] [--show-secrets]
 psm node add CORE PROTO [--tag TAG] [--port PORT] [protocol options…] [--json]
 psm node update CORE PROTO TAG [options to change…] [--json]
 psm node delete CORE PROTO TAG --yes
-psm node export CORE PROTO TAG [--server HOST] [--format uri|json|surge|singbox]
+psm node export CORE PROTO TAG [--server HOST] [--format uri|json|surge|singbox|clash]
 ```
 
-`CORE` is `xray`, `sing-box` (or `singbox`) or `mihomo`. `--format singbox` prints the node as a sing-box client outbound (JSON).
+`CORE` is `xray`, `sing-box` (or `singbox`) or `mihomo`. `--format singbox` prints the node as a sing-box client outbound (JSON); `--format clash` prints the TLS protocols (Hysteria2, TUIC, AnyTLS, VLESS + TLS, Trojan, VMess) as one complete mihomo proxy (JSON, with `skip-cert-verify`); for the other protocols the link is enough.
+
+`psm node add` asks no questions, so:
+
+- **Certificates**: the TLS protocols of sing-box / mihomo and Xray's Hysteria2 need no `--cert-path` / `--key-path`. When `/etc/nginx/ssl/<domain>/` holds a certificate for the `--sni` domain, it is used; otherwise PSM makes a self-signed one (for `www.bing.com` when there is no `--sni`), records `insecure = 1`, and the exported links and configs tell clients to accept it. Xray's vision / xhttp / trojan / vmess need a certificate for `--domain` already; without one the node is refused with the reason (instead of Xray refusing its whole config).
+- **Exits**: `--exit warp|vpngate [--exit-sites all|ai|streaming|GEOSITE,…] [--exit-country CC]` sends this node's traffic — all of it, or only those sites (ai = OpenAI, Anthropic, Gemini; streaming = Netflix, Disney+, HBO, Prime Video, Spotify) — out through Cloudflare WARP or the free residential line (VPNGate; the first time, a residential line in country CC, default JP); the rest goes out directly. `--exit none`, or deleting the node, removes the rule. `psm exit status|warp|vpngate [--core CORE] [--json]` shows or prepares the two exits.
+- **REALITY camouflage targets**: `psm sni find [--engine netlas|quake|zoomeye|fofa] [--key-stdin] [--json]` asks a cyberspace-mapping engine for hosts with certificates in this server's own ASN, checks each with a TLS handshake and lists the usable SNI and dest by latency; `--key-stdin` reads the engine's API key from stdin for that search only.
+- **Firewall**: when ufw, firewalld or a default-deny iptables is enforcing, the node's port is opened (UDP for Hysteria2 / TUIC / WireGuard / mKCP, TCP and UDP for SS2022 / Snell / SOCKS), and the rule PSM added is removed when the node is deleted or moves to another port; a port that was already open is left alone. Nodes listening on 127.0.0.1 are not opened.
 
 | Core | Protocols |
 | --- | --- |
@@ -35,11 +42,11 @@ Common protocol options:
 | reality | `--port`, with `--server-name` and `--dest` for the camouflage target |
 | vision | `--port --domain` |
 | xhttp | `--port --domain [--mode xhttp\|upgrade\|ws\|grpc\|httpupgrade\|h2\|mkcp\|reality-layer]` |
-| hysteria2 | `--port --sni --cert-path --key-path [--password] [--obfs-pass [--obfs-type salamander\|gecko]] [--hop-ports START-END]` |
-| tuic | `--port --sni --cert-path --key-path [--uuid] [--password] [--congestion-control bbr\|cubic\|new_reno]` |
-| anytls | `--port --sni --cert-path --key-path [--password]` |
-| vless (sing-box / mihomo) | `--port --sni --cert-path --key-path [--transport tcp\|ws\|grpc\|…] [--path]` |
-| trojan / vmess | `--port --domain` |
+| hysteria2 | `--port [--sni] [--cert-path --key-path] [--password] [--obfs-pass [--obfs-type salamander\|gecko]] [--hop-ports START-END]` |
+| tuic | `--port [--sni] [--cert-path --key-path] [--uuid] [--password] [--congestion-control bbr\|cubic\|new_reno]` |
+| anytls | `--port [--sni] [--cert-path --key-path] [--password]` |
+| vless (sing-box / mihomo) | `--port [--sni] [--cert-path --key-path] [--transport tcp\|ws\|grpc\|…] [--path]` |
+| trojan / vmess | Xray: `--port --domain`; sing-box / mihomo: `--port [--sni] [--cert-path --key-path]` |
 | ss2022 | `--port [--method] [--password]` |
 | socks | `--port [--listen-addr 127.0.0.1\|0.0.0.0] [--username] [--password]` (public listeners require credentials) |
 | snell | `--port [--version] [--psk]` |

@@ -13,7 +13,9 @@ PSM Panel 是 PSM 的网页管理面板，界面参考 Xboard，用来在一个�
 - 服务器上的 **psm-agent 不监听任何端口**，只主动用 HTTPS 连面板；
 - 在网页上**新建、修改、删除节点**，Snell 和 SS2022 可以用独立的 snell-server（v4 / v5 / v6）、ss-rust；
 - **流量**：每个节点本月用量、每日图表、流量上限（超额自动暂停）；
-- **汇总订阅**：所有服务器的节点一个地址，通用链接、Clash / mihomo、sing-box、Surge 自动识别；
+- **汇总订阅**：所有服务器的节点一个地址，通用链接、Clash / mihomo、Stash、sing-box、Surge、Quantumult X、Loon 自动识别；每种格式都有带基础分流的内置模板，也可以自己写模板；
+- **出口分流**：建节点时可以让这个节点的 AI、流媒体或全部流量走 Cloudflare WARP 或免费家宽线路（VPNGate），其余照常直连；
+- **REALITY 伪装目标自动选择**：填一个网络测绘引擎（Netlas / Quake / ZoomEye / FOFA）的 API Key，面板让服务器查同 ASN 里有证书的网站并逐个握手检查，一键填入；
 - **诊断**：一键查看服务器的 PSM 版本、内核和 `psm doctor` 结果。
 
 接入面板后，服务器上的 PSM 照常可以用菜单和命令行管理，互不影响。

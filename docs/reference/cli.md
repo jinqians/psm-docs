@@ -15,10 +15,17 @@ psm node show CORE PROTO TAG [--json] [--show-secrets]
 psm node add CORE PROTO [--tag TAG] [--port PORT] [协议参数…] [--json]
 psm node update CORE PROTO TAG [要修改的参数…] [--json]
 psm node delete CORE PROTO TAG --yes
-psm node export CORE PROTO TAG [--server HOST] [--format uri|json|surge|singbox]
+psm node export CORE PROTO TAG [--server HOST] [--format uri|json|surge|singbox|clash]
 ```
 
-`CORE` 是 `xray`、`sing-box`（也可写 `singbox`）或 `mihomo`。`--format singbox` 输出这个节点的 sing-box 客户端 outbound（JSON）。
+`CORE` 是 `xray`、`sing-box`（也可写 `singbox`）或 `mihomo`。`--format singbox` 输出这个节点的 sing-box 客户端 outbound（JSON）；`--format clash` 把 TLS 协议（Hysteria2、TUIC、AnyTLS、VLESS + TLS、Trojan、VMess）输出为一个完整的 mihomo 节点（JSON，带 `skip-cert-verify`），其他协议用链接即可。
+
+`psm node add` 不问问题，所以：
+
+- **证书**：sing-box / mihomo 的 TLS 协议和 Xray 的 Hysteria2 可以不给 `--cert-path` / `--key-path`。`--sni` 的域名在 `/etc/nginx/ssl/<域名>/` 有证书就用它，否则自动签一张自签证书（不给 `--sni` 时用 `www.bing.com`），节点记为 `insecure = 1`，导出的链接和配置会让客户端跳过校验。Xray 的 vision / xhttp / trojan / vmess 要求 `--domain` 已有证书，没有时拒绝并说明原因（不会让 Xray 整体起不来）。
+- **出口分流**：`--exit warp|vpngate [--exit-sites all|ai|streaming|GEOSITE,…] [--exit-country CC]` 让这个节点的流量（全部，或只是这些网站；ai = OpenAI、Anthropic、Gemini，streaming = Netflix、Disney+、HBO、Prime Video、Spotify）从 Cloudflare WARP 或免费家宽线路（VPNGate，第一次在国家 CC 里找家宽线路，默认 JP）出去，其余照常直连；`--exit none` 或删除节点时规则一起删掉。`psm exit status|warp|vpngate [--core CORE] [--json]` 查看或提前准备这两种出口。
+- **REALITY 伪装目标**：`psm sni find [--engine netlas|quake|zoomeye|fofa] [--key-stdin] [--json]` 用网络测绘引擎查本机同一 ASN 里有证书的网站，逐个做 TLS 握手检查，按延迟列出可用的 SNI 和 dest；`--key-stdin` 从标准输入读引擎的 API Key，只用于这次查询。
+- **防火墙**：ufw、firewalld 或默认拒绝的 iptables 在工作时，自动放行节点端口（Hysteria2 / TUIC / WireGuard / mKCP 为 UDP，SS2022 / Snell / SOCKS 为 TCP 和 UDP），删除节点或改端口时把 PSM 加的规则删掉；本来就放行的端口不动。监听 127.0.0.1 的节点不放行。
 
 | 内核 | 协议 |
 | --- | --- |
@@ -35,11 +42,11 @@ psm node export CORE PROTO TAG [--server HOST] [--format uri|json|surge|singbox]
 | reality | `--port`，`--server-name`、`--dest` 指定伪装目标 |
 | vision | `--port --domain` |
 | xhttp | `--port --domain [--mode xhttp\|upgrade\|ws\|grpc\|httpupgrade\|h2\|mkcp\|reality-layer]` |
-| hysteria2 | `--port --sni --cert-path --key-path [--password] [--obfs-pass [--obfs-type salamander\|gecko]] [--hop-ports START-END]` |
-| tuic | `--port --sni --cert-path --key-path [--uuid] [--password] [--congestion-control bbr\|cubic\|new_reno]` |
-| anytls | `--port --sni --cert-path --key-path [--password]` |
-| vless（sing-box / mihomo） | `--port --sni --cert-path --key-path [--transport tcp\|ws\|grpc\|…] [--path]` |
-| trojan / vmess | `--port --domain` |
+| hysteria2 | `--port [--sni] [--cert-path --key-path] [--password] [--obfs-pass [--obfs-type salamander\|gecko]] [--hop-ports START-END]` |
+| tuic | `--port [--sni] [--cert-path --key-path] [--uuid] [--password] [--congestion-control bbr\|cubic\|new_reno]` |
+| anytls | `--port [--sni] [--cert-path --key-path] [--password]` |
+| vless（sing-box / mihomo） | `--port [--sni] [--cert-path --key-path] [--transport tcp\|ws\|grpc\|…] [--path]` |
+| trojan / vmess | Xray：`--port --domain`；sing-box / mihomo：`--port [--sni] [--cert-path --key-path]` |
 | ss2022 | `--port [--method] [--password]` |
 | socks | `--port [--listen-addr 127.0.0.1\|0.0.0.0] [--username] [--password]`（公网监听必须设置用户名密码） |
 | snell | `--port [--version] [--psk]` |
