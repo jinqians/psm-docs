@@ -1,12 +1,12 @@
 ---
 title: PSM Panel：多台 VPS 的网页管理面板（Cloudflare 一键部署）
 description: PSM Panel 是 PSM 的网页管理面板，一键部署到 Cloudflare Workers，VPS 一条命令接入（没装过 PSM 也可以），不开放任何端口；在网页上管理所有服务器的节点、流量和限额，汇总成一个订阅。
-keywords: PSM Panel, 代理面板, 多服务器管理, Cloudflare Workers 面板, 节点管理面板, 汇总订阅
+keywords: PSM Panel, 代理面板, 多服务器管理, Cloudflare Workers 面板, 节点管理面板, 汇总订阅, Xboard, Xboard 替代, 类 Xboard 面板, 机场面板, 节点订阅管理
 ---
 
 # PSM Panel
 
-PSM Panel 是 PSM 的网页管理面板，界面参考 Xboard，用来在一个网页里管理多台 VPS：
+PSM Panel 是 PSM 的网页管理面板，用来在一个网页里管理多台 VPS：
 
 - **一键部署**到你自己的 Cloudflare 账号（Workers + D1，免费额度够用），只需要填一个管理员密码；
 - **一条命令接入 VPS**：没装过 PSM 的服务器也行，命令会先装好 PSM；节点用到的内核自动安装；
@@ -34,4 +34,4 @@ bash <(curl -fsSL https://psm.jinqians.com) --panel https://<你的面板地址>
 
 ## 完整文档
 
-部署、接入、节点、流量、订阅、安全和常见问题：**[PSM Panel 文档](https://jinqians.github.io/psm-panel-docs/)**；源码在 [jinqians/psm-panel](https://github.com/jinqians/psm-panel)。
+部署、接入、节点、流量、订阅、安全和常见问题：**[PSM Panel 文档](https://psm-panel-docs.pages.dev/)**；源码在 [jinqians/psm-panel](https://github.com/jinqians/psm-panel)。

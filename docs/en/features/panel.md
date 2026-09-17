@@ -1,12 +1,12 @@
 ---
 title: "PSM Panel: a web panel for many VPS (one-click Cloudflare deploy)"
 description: PSM Panel is PSM's web panel. One click deploys it to Cloudflare Workers; a VPS joins with one command (even without PSM) and opens no port. Manage the nodes, traffic and limits of every server on one page, in one subscription.
-keywords: PSM Panel, proxy panel, multi-server management, Cloudflare Workers panel, node management panel, combined subscription
+keywords: PSM Panel, proxy panel, multi-server management, Cloudflare Workers panel, node management panel, combined subscription, Xboard, Xboard alternative, Xboard-style panel, node subscription manager
 ---
 
 # PSM Panel
 
-PSM Panel is PSM's web panel, laid out like Xboard, for managing many VPS on one page:
+PSM Panel is PSM's web panel for managing many VPS on one page:
 
 - **One-click deploy** to your own Cloudflare account (Workers + D1, the free tier is enough): the only setting is an admin password.
 - **One command joins a VPS**, even one without PSM: the command installs PSM first, and the cores your nodes need are installed on demand.
@@ -34,4 +34,4 @@ It installs (or updates) PSM, then joins the panel with [`psm agent join`](/en/r
 
 ## Full documentation
 
-Deployment, joining, nodes, traffic, subscriptions, security and FAQ (in Chinese): **[PSM Panel docs](https://jinqians.github.io/psm-panel-docs/)**; source at [jinqians/psm-panel](https://github.com/jinqians/psm-panel).
+Deployment, joining, nodes, traffic, subscriptions, security and FAQ (in Chinese): **[PSM Panel docs](https://psm-panel-docs.pages.dev/)**; source at [jinqians/psm-panel](https://github.com/jinqians/psm-panel).
