@@ -26,6 +26,10 @@ keywords: 免费家宽 IP, 住宅 IP 出口, 家宽落地, VPNGate, 解锁 ChatG
 
 ## 怎么开启
 
+::: tip 只想让某一个节点走家宽？
+内核菜单里的 **节点出口分流（WARP / 家宽）**（sing-box 主菜单 2 → 14，mihomo 3 → 14，Xray 4 → 13）可以只把某个节点的指定流量送进家宽，其余节点照常直连；命令行是 `psm node add … --exit vpngate --exit-sites streaming`。详见 [只给某个节点配出口](/features/unlock#per-node)。下面这套是整机共用的家宽出口设置。
+:::
+
 进入任意一个内核的菜单（Xray / sing-box / mihomo 管理）→ **路由分流管理** → **VPNGate 家宽出口**（sing-box、mihomo 是主菜单 2 或 3 → 5 → 11）：
 
 ![VPNGate 家宽出口菜单](/images/vpngate.zh.png){.shot}

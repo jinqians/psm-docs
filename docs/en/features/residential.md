@@ -26,6 +26,10 @@ The exit comes from [VPNGate](https://www.vpngate.net/), a public VPN relay proj
 
 ## Turning it on
 
+::: tip Want the residential line for one node only?
+**Per-node exit (WARP / residential)** in the core's menu (sing-box: main menu 2 → 14, mihomo: 3 → 14, Xray: 4 → 13) sends only that node's chosen traffic into the residential tunnel, leaving every other node direct; from the command line it is `psm node add … --exit vpngate --exit-sites streaming`. See [An exit for one node only](/en/features/unlock#per-node). What follows sets up the server-wide residential exit.
+:::
+
 In any core's menu (Xray, sing-box or mihomo) open **Routing**, then **VPNGate residential-IP unlock exit** (for sing-box and mihomo: main menu 2 or 3 → 5 → 11):
 
 ![VPNGate residential exit menu](/images/vpngate.en.png){.shot}
