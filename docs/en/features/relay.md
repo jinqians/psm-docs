@@ -26,6 +26,28 @@ Choose **Add a relay rule** and fill in:
 
 Then point the client at the **relay's IP and the local listening port** (in the example, `RELAY_IP:5000`) and leave everything else as it was.
 
+## Relays from the panel
+
+Once a server has joined the [PSM panel](/en/features/panel), relays can be made on the panel's **中转** page instead of on the server:
+
+| Field | What it is |
+| --- | --- |
+| Entry server | the machine the rule is installed on, and the one clients connect to |
+| Listening port | the port it listens on; the panel opens it in the firewall |
+| Landing server | optional. Pick it when the landing machine is in the panel too — it only pairs the two ends so both can be named |
+| Landing address / port | what the entry server actually dials; fill it in even when the landing machine is not in the panel |
+| Also forward UDP | required for QUIC-based protocols such as Hysteria2 and TUIC |
+
+The panel hands the rule to psm-agent on the entry server, which installs realm first if the server has none. Deleting a relay closes only the port the panel opened itself; a rule you allowed by hand is left alone.
+
+### Encrypting the hop
+
+Tick **对这一跳加密（TLS）** and the traffic between the entry and landing machines is wrapped in TLS, so what passes between them no longer looks like the node's own protocol. The client-to-entry leg is unaffected — no client configuration changes at all.
+
+- The landing machine has a certificate: enter the name on that certificate.
+- The landing machine uses a self-signed one: tick **接受自签名证书**, which keeps the encryption but does not verify the peer.
+- TLS wraps TCP only; UDP is still forwarded in the clear.
+
 ## More
 
 - **Modify / delete / list relay rules**.
