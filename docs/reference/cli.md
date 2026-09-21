@@ -1,6 +1,6 @@
 ---
-title: PSM 命令参考：psm node / core / standalone / traffic / agent / user / migrate / doctor
-description: PSM 全部命令行用法：psm node 增删改查导出节点（REALITY、Hysteria2、TUIC、AnyTLS 等协议参数、443 复用、端口跳跃）、psm core 不交互安装内核、psm standalone 独立 Snell v4/v5/v6 与 ss-rust、psm traffic 流量统计与限额、psm agent 接入 PSM Panel、psm user 多用户、psm migrate 迁移、psm doctor 诊断，以及定时任务入口。
+title: PSM 命令参考：psm node / relay / core / standalone / traffic / agent / user / migrate / doctor
+description: PSM 全部命令行用法：psm node 增删改查导出节点（REALITY、Hysteria2、TUIC、AnyTLS 等协议参数、443 复用、端口跳跃）、psm relay 中转（realm 端口转发，这一跳可选 TLS 加密）、psm core 不交互安装内核、psm standalone 独立 Snell v4/v5/v6 与 ss-rust、psm traffic 流量统计与限额、psm agent 接入 PSM Panel、psm user 多用户、psm migrate 迁移、psm doctor 诊断，以及定时任务入口。
 ---
 
 # 命令参考
@@ -26,6 +26,38 @@ psm node export CORE PROTO TAG [--server HOST] [--format uri|json|surge|singbox|
 - **出口分流**：`--exit warp|vpngate [--exit-sites all|ai|streaming|GEOSITE,…] [--exit-country CC]` 让这个节点的流量（全部，或只是这些网站；ai = OpenAI、Anthropic、Gemini，streaming = Netflix、Disney+、HBO、Prime Video、Spotify）从 Cloudflare WARP 或免费家宽线路（VPNGate，第一次在国家 CC 里找家宽线路，默认 JP）出去，其余照常直连；`--exit none` 或删除节点时规则一起删掉。`psm exit status|warp|vpngate [--core CORE] [--json]` 查看或提前准备这两种出口。
 - **REALITY 伪装目标**：`psm sni find [--engine netlas|quake|zoomeye|fofa] [--key-stdin] [--json]` 用网络测绘引擎查本机同一 ASN 里有证书的网站，逐个做 TLS 握手检查，按延迟列出可用的 SNI 和 dest；`--key-stdin` 从标准输入读引擎的 API Key，只用于这次查询。
 - **防火墙**：ufw、firewalld 或默认拒绝的 iptables 在工作时，自动放行节点端口（Hysteria2 / TUIC / WireGuard / mKCP 为 UDP，SS2022 / Snell / SOCKS 为 TCP 和 UDP），删除节点或改端口时把 PSM 加的规则删掉；本来就放行的端口不动。监听 127.0.0.1 的节点不放行。
+
+## psm relay：中转（realm）
+
+```bash
+psm relay list [--json]
+psm relay show TAG [--json]
+psm relay add --tag TAG --listen-port PORT --remote-host HOST --remote-port PORT
+              [--udp] [--tls] [--tls-sni NAME] [--tls-cert FILE] [--tls-key FILE]
+              [--tls-insecure] [--no-firewall] [--json]
+psm relay update TAG [--listen-port PORT] [--remote-host HOST] [--remote-port PORT]
+              [--udp true|false] [--tls true|false] [--tls-sni NAME] [--json]
+psm relay delete TAG --yes [--if-exists] [--json]
+psm relay install [--json]
+```
+
+[中转](/features/relay) 的非交互接口。规则与菜单共用同一份存储（`config/realm/rules.json`），realm 的 `config.toml` 由它生成，所以菜单建的和命令行建的是同一回事。只有**入口机**需要建规则，落地机的节点配置不用改。realm 第一次用时自动安装（`psm relay add` 会装，也可以先 `psm relay install`）。
+
+**加密这一跳**：加 `--tls`，realm 会把转发的流量套一层 TLS，两台机器之间跑的就不再是节点协议原本的样子。规则算哪一端由**转发目标**决定——转发到本机（`127.0.0.1`，或本机自己的任一地址）是**落地端**，终止 TLS 并持有证书（`--tls-cert`/`--tls-key`，不给则按 `--tls-sni` 自动签一张自签证书）；转发到别的主机是**入口端**，负责拨 TLS（需要 `--tls-sni`，对端是自签证书时加 `--tls-insecure`）。
+
+```bash
+# 落地机：终止 TLS，转给本机 443 上的节点
+psm relay add --tag out --listen-port 8443 \
+    --remote-host 127.0.0.1 --remote-port 443 --tls
+
+# 入口机：拨 TLS 到落地机
+psm relay add --tag in --listen-port 443 \
+    --remote-host 落地机IP --remote-port 8443 \
+    --tls --tls-sni relay.example.com --tls-insecure
+```
+
+- **`--tls` 只包 TCP**：realm 的 TLS 作用在 TCP 流上，`--udp` 的 UDP 那一半仍是明文转发。Hysteria2、TUIC、WireGuard 这些走 UDP 的协议不会被它隐藏。
+- **防火墙**：和节点一样自动放行监听端口（`--udp` 时 TCP 和 UDP 都放行），改端口或删除规则时**只撤销 PSM 自己加过的那条**（记在 `config/firewall-ports`），你手工放行的端口不动；`--no-firewall` 可以完全不碰防火墙。
 
 | 内核 | 协议 |
 | --- | --- |

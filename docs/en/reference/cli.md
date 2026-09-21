@@ -1,6 +1,6 @@
 ---
-title: "PSM CLI reference: psm node, core, standalone, traffic, agent, user, migrate, doctor"
-description: Every PSM command-line command. psm node to list, add, update, delete and export nodes (REALITY, Hysteria2, TUIC, AnyTLS options, port 443 sharing, port hopping), psm core to install a core without questions, psm standalone for standalone Snell v4/v5/v6 and ss-rust, psm traffic for metering and limits, psm agent to join a PSM Panel, psm user for accounts, psm migrate, psm doctor, and the scheduled-job entry points.
+title: "PSM CLI reference: psm node, relay, core, standalone, traffic, agent, user, migrate, doctor"
+description: Every PSM command-line command. psm node to list, add, update, delete and export nodes (REALITY, Hysteria2, TUIC, AnyTLS options, port 443 sharing, port hopping), psm relay for relays (realm port forwarding, with the hop optionally wrapped in TLS), psm core to install a core without questions, psm standalone for standalone Snell v4/v5/v6 and ss-rust, psm traffic for metering and limits, psm agent to join a PSM Panel, psm user for accounts, psm migrate, psm doctor, and the scheduled-job entry points.
 ---
 
 # CLI reference
@@ -26,6 +26,38 @@ psm node export CORE PROTO TAG [--server HOST] [--format uri|json|surge|singbox|
 - **Exits**: `--exit warp|vpngate [--exit-sites all|ai|streaming|GEOSITE,…] [--exit-country CC]` sends this node's traffic — all of it, or only those sites (ai = OpenAI, Anthropic, Gemini; streaming = Netflix, Disney+, HBO, Prime Video, Spotify) — out through Cloudflare WARP or the free residential line (VPNGate; the first time, a residential line in country CC, default JP); the rest goes out directly. `--exit none`, or deleting the node, removes the rule. `psm exit status|warp|vpngate [--core CORE] [--json]` shows or prepares the two exits.
 - **REALITY camouflage targets**: `psm sni find [--engine netlas|quake|zoomeye|fofa] [--key-stdin] [--json]` asks a cyberspace-mapping engine for hosts with certificates in this server's own ASN, checks each with a TLS handshake and lists the usable SNI and dest by latency; `--key-stdin` reads the engine's API key from stdin for that search only.
 - **Firewall**: when ufw, firewalld or a default-deny iptables is enforcing, the node's port is opened (UDP for Hysteria2 / TUIC / WireGuard / mKCP, TCP and UDP for SS2022 / Snell / SOCKS), and the rule PSM added is removed when the node is deleted or moves to another port; a port that was already open is left alone. Nodes listening on 127.0.0.1 are not opened.
+
+## psm relay: relays (realm)
+
+```bash
+psm relay list [--json]
+psm relay show TAG [--json]
+psm relay add --tag TAG --listen-port PORT --remote-host HOST --remote-port PORT
+              [--udp] [--tls] [--tls-sni NAME] [--tls-cert FILE] [--tls-key FILE]
+              [--tls-insecure] [--no-firewall] [--json]
+psm relay update TAG [--listen-port PORT] [--remote-host HOST] [--remote-port PORT]
+              [--udp true|false] [--tls true|false] [--tls-sni NAME] [--json]
+psm relay delete TAG --yes [--if-exists] [--json]
+psm relay install [--json]
+```
+
+The non-interactive side of [relays](/en/features/relay). The rules share the menu's own store (`config/realm/rules.json`), from which realm's `config.toml` is generated, so a relay made from the menu and one made here are the same thing. Only the **entry** machine needs a rule; the landing machine's nodes stay as they are. realm is installed on first use (`psm relay add` does it, or run `psm relay install` first).
+
+**Encrypting the hop**: add `--tls` and realm wraps the forwarded stream in TLS, so what travels between the two machines no longer looks like the node's own protocol. Which side a rule is follows from where it forwards — to this machine (`127.0.0.1`, or any of its own addresses) it is the **landing** side, which terminates TLS and holds the certificate (`--tls-cert`/`--tls-key`, else a self-signed pair made for `--tls-sni`); to another host it is the **entry** side, which dials it (`--tls-sni` is required, with `--tls-insecure` when the other end is self-signed).
+
+```bash
+# landing: terminate TLS, hand it to the node on port 443 here
+psm relay add --tag out --listen-port 8443 \
+    --remote-host 127.0.0.1 --remote-port 443 --tls
+
+# entry: dial TLS to the landing machine
+psm relay add --tag in --listen-port 443 \
+    --remote-host LANDING_IP --remote-port 8443 \
+    --tls --tls-sni relay.example.com --tls-insecure
+```
+
+- **`--tls` covers TCP only**: realm's TLS wraps TCP streams, so with `--udp` the UDP half keeps going as plain UDP. Protocols that matter over UDP (Hysteria2, TUIC, WireGuard) are not hidden by it.
+- **Firewall**: the listening port is opened as a node's is (TCP and UDP with `--udp`), and changing the port or deleting the rule closes **only what PSM opened** (recorded in `config/firewall-ports`) — a port you opened yourself is left alone. `--no-firewall` leaves the firewall untouched.
 
 | Core | Protocols |
 | --- | --- |
