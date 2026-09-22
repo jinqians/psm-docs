@@ -41,6 +41,12 @@ psm node add xray reality --tag hk-443 --port 21001 \
 
 The node listens on a loopback port (21001 here); only 443 faces the internet. Nginx is installed if it is missing, and the routing table follows port, domain and deletion changes.
 
+In the [PSM panel](/en/features/panel), tick **挂到 443 端口复用** when creating a node and psm-agent does the same thing on the server — it is the same path as the command line. The tick box appears only for protocols that can be mounted, and with it on, the connect port is fixed at 443 and is not asked for.
+
+::: warning Fixed once the node is made
+Whether a node listens on its own port or sits behind the shared 443 decides the address clients use, so it is not something an update can change — PSM and the panel both refuse it. To switch, delete the node and make it again the other way.
+:::
+
 ::: tip "REALITY: Listening on non-443 ports" in the log
 On a mounted node this warning can be ignored: the node listens on loopback, and the port the world sees is 443. It only matters for a node listening directly on a public port other than 443.
 :::

@@ -40,6 +40,8 @@ Once a server has joined the [PSM panel](/en/features/panel), relays can be made
 
 The panel hands the rule to psm-agent on the entry server, which installs realm first if the server has none. Deleting a relay closes only the port the panel opened itself; a rule you allowed by hand is left alone.
 
+**How the hop is doing**: the list shows the latest round trip, jitter, loss and the traffic carried, and clicking a row opens charts of the round trip and jitter, the loss, and the traffic between measurements — over 1 hour, 6 hours, 24 hours or 7 days. psm-agent measures every minute and the panel keeps 7 days. The round trip is measured with TCP connects rather than ping: ICMP is filtered often enough on these networks that ping would report loss that is not there. A landing side that never answers shows 100% loss instead of an invented round trip.
+
 ### Encrypting the hop
 
 Tick **对这一跳加密（TLS）** and the traffic between the entry and landing machines is wrapped in TLS, so what passes between them no longer looks like the node's own protocol. The client-to-entry leg is unaffected — no client configuration changes at all.

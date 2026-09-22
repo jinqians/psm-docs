@@ -22,6 +22,16 @@ A joined server keeps working with PSM's menu and command line as before.
 
 <a href="https://deploy.workers.cloudflare.com/?url=https://github.com/jinqians/psm-panel" target="_blank" rel="noopener"><img src="https://deploy.workers.cloudflare.com/button" alt="Deploy to Cloudflare"></a>
 
+## The admin password
+
+`ADMIN_PASSWORD`, the one field in the deploy form, is the password you sign in with (8 characters or more). It only has to be set once: the first time the panel reads it, a salted hash of it goes into the panel's own D1, so a later deploy that loses the secret does not lock you out.
+
+::: warning Add it as a Secret, not as a Variable
+If you set or change it in the Cloudflare dashboard later, add it under the Worker's **Settings → Variables and Secrets** as a **Secret**. A plain **Variable** is wiped on every deploy — the deploy config declares no variables, and `wrangler deploy` keeps only secrets — which is exactly why a rebuild would ask for the admin password again.
+:::
+
+While the secret is there it wins: changing it changes the password, and every signed-in session ends.
+
 ## Joining a server
 
 Add the server on the panel's servers page, copy the command it gives you and run it on the VPS as root:

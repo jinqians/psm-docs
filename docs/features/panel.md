@@ -22,6 +22,16 @@ PSM Panel 是 PSM 的网页管理面板，用来在一个网页里管理多台 V
 
 <a href="https://deploy.workers.cloudflare.com/?url=https://github.com/jinqians/psm-panel" target="_blank" rel="noopener"><img src="https://deploy.workers.cloudflare.com/button" alt="Deploy to Cloudflare"></a>
 
+## 管理员密码
+
+部署表单里填的 `ADMIN_PASSWORD` 就是后台登录密码（至少 8 位）。只需要设置这一次：面板第一次读到它时，会把它的加盐哈希存进自己的 D1，之后重新部署即使机密没了也照样能登录。
+
+::: warning 要加「机密」，不要加「变量」
+之后在 Cloudflare 控制台补设或修改时，请在 Worker 的「设置 → 变量和机密」里添加**机密（Secret）**。明文**变量**会在每次重新部署时被清掉——部署配置里没有声明任何变量，而 `wrangler deploy` 只保留机密——这正是「重新部署后又提示还没有设置管理员密码」的原因。
+:::
+
+机密还在时以机密为准：改了机密就等于改了密码，所有已登录的会话随之失效。
+
 ## 接入服务器
 
 在面板的"服务器"页添加服务器，复制给出的命令，在 VPS 上以 root 执行：
