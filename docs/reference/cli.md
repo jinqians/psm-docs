@@ -38,6 +38,7 @@ psm relay add --tag TAG --listen-port PORT --remote-host HOST --remote-port PORT
 psm relay update TAG [--listen-port PORT] [--remote-host HOST] [--remote-port PORT]
               [--udp true|false] [--tls true|false] [--tls-sni NAME] [--json]
 psm relay delete TAG --yes [--if-exists] [--json]
+psm relay probe [TAG] [--samples N] [--json]
 psm relay install [--json]
 ```
 
@@ -58,6 +59,7 @@ psm relay add --tag in --listen-port 443 \
 
 - **`--tls` 只包 TCP**：realm 的 TLS 作用在 TCP 流上，`--udp` 的 UDP 那一半仍是明文转发。Hysteria2、TUIC、WireGuard 这些走 UDP 的协议不会被它隐藏。
 - **防火墙**：和节点一样自动放行监听端口（`--udp` 时 TCP 和 UDP 都放行），改端口或删除规则时**只撤销 PSM 自己加过的那条**（记在 `config/firewall-ports`），你手工放行的端口不动；`--no-firewall` 可以完全不碰防火墙。
+- **链路质量与流量**：`psm relay probe` 报告到落地机的往返延迟、抖动、丢包，以及这条中转已经搬运的字节数。延迟用 TCP 连接测量而不是 ping：这类网络上 ICMP 常被过滤，ping 会报出并不存在的丢包，而中转本来跑的就是 TCP，连接耗时才是流量真正经历的。抖动取相邻两次往返之差的平均。落地机完全不通时报 `rtt_ms: null` 和 100% 丢包，不会编一个数字出来。流量按监听端口记在节点共用的 `PSM_TRF` 计量链上（标签 `relay-<TAG>`，不会和节点撞名），规则随中转的建立、改端口和删除一起维护。接入面板后 psm-agent 每 60 秒测一次、随同步上报，面板保留 7 天用来画图。
 
 | 内核 | 协议 |
 | --- | --- |

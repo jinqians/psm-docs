@@ -38,6 +38,7 @@ psm relay add --tag TAG --listen-port PORT --remote-host HOST --remote-port PORT
 psm relay update TAG [--listen-port PORT] [--remote-host HOST] [--remote-port PORT]
               [--udp true|false] [--tls true|false] [--tls-sni NAME] [--json]
 psm relay delete TAG --yes [--if-exists] [--json]
+psm relay probe [TAG] [--samples N] [--json]
 psm relay install [--json]
 ```
 
@@ -58,6 +59,7 @@ psm relay add --tag in --listen-port 443 \
 
 - **`--tls` covers TCP only**: realm's TLS wraps TCP streams, so with `--udp` the UDP half keeps going as plain UDP. Protocols that matter over UDP (Hysteria2, TUIC, WireGuard) are not hidden by it.
 - **Firewall**: the listening port is opened as a node's is (TCP and UDP with `--udp`), and changing the port or deleting the rule closes **only what PSM opened** (recorded in `config/firewall-ports`) — a port you opened yourself is left alone. `--no-firewall` leaves the firewall untouched.
+- **Link quality and traffic**: `psm relay probe` reports the round trip to the landing machine, the jitter, the loss, and the bytes this relay has carried. The round trip is measured with plain TCP connects rather than with ping: ICMP is filtered often enough on these networks that ping would report loss that is not there, and a relay carries TCP anyway, so a connect is what the traffic actually experiences. Jitter is the mean absolute difference between consecutive round trips. A landing side that never answers gives `rtt_ms: null` and 100% loss instead of a made-up number. Traffic is counted on the listening port through `PSM_TRF`, the same accounting chain the nodes use (tagged `relay-<TAG>`, so it cannot collide with a node's), and the rules follow the relay as it is created, moved to another port and deleted. On a server that joined a panel, psm-agent measures every 60 seconds and sends the readings with its sync; the panel keeps 7 days of them for its charts.
 
 | Core | Protocols |
 | --- | --- |
