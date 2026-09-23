@@ -42,6 +42,8 @@ bash <(curl -fsSL https://psm.jinqians.com) --panel https://<你的面板地址>
 
 它会安装（或更新）PSM，再用 [`psm agent join`](/reference/cli#psm-agent-接入-psm-panel) 接入面板。
 
+以后 psm-agent 有新版本时，在面板"服务器"页点 **升级 agent** 即可（服务器自己更新 PSM 并换上新版），不必再登录 VPS。
+
 ## 完整文档
 
 部署、接入、节点、流量、订阅、安全和常见问题：**[PSM Panel 文档](https://psm-panel-docs.pages.dev/)**；源码在 [jinqians/psm-panel](https://github.com/jinqians/psm-panel)。

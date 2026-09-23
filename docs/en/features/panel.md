@@ -42,6 +42,8 @@ bash <(curl -fsSL https://psm.jinqians.com) --panel https://<your panel> --join 
 
 It installs (or updates) PSM, then joins the panel with [`psm agent join`](/en/reference/cli#psm-agent-joining-a-psm-panel).
 
+When a newer psm-agent comes out, the servers page has an **升级 agent** button for it: the server updates PSM and installs the new agent itself, with no SSH.
+
 ## Full documentation
 
 Deployment, joining, nodes, traffic, subscriptions, security and FAQ (in Chinese): **[PSM Panel docs](https://psm-panel-docs.pages.dev/)**; source at [jinqians/psm-panel](https://github.com/jinqians/psm-panel).

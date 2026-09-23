@@ -139,10 +139,13 @@ psm traffic unset TAG [--json]
 ```bash
 psm agent join --panel URL --token TOKEN
 psm agent status [--json]
+psm agent upgrade
 psm agent remove --yes
 ```
 
 `join` 下载 psm-agent（用发布页的 SHA256SUMS 校验），用面板给的一次性令牌接入，并作为服务运行。psm-agent 不监听任何端口。一般直接执行面板给出的安装命令即可（它会先装好或更新 PSM，再调用 `psm agent join`），见 [PSM Panel](/features/panel)。`remove` 断开面板并删除 psm-agent，节点保留。
+
+`upgrade` 先更新 PSM，再把 psm-agent 换成新 PSM 指定的版本并重启服务——要装的版本写在 PSM 自己的 `lib/agent.sh` 里，所以顺序不能反。面板"服务器"页的 **升级 agent** 按钮就是让 psm-agent 执行这条命令，不必登录 VPS。节点、中转和流量统计都不受影响。
 
 ## psm version
 

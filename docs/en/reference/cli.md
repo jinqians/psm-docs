@@ -139,10 +139,13 @@ psm traffic unset TAG [--json]
 ```bash
 psm agent join --panel URL --token TOKEN
 psm agent status [--json]
+psm agent upgrade
 psm agent remove --yes
 ```
 
 `join` downloads psm-agent (checked against the release's SHA256SUMS), joins the panel with its one-time token and runs it as a service. psm-agent listens on no port. Usually you run the install command the panel gives you (it installs or updates PSM first, then calls `psm agent join`); see [PSM Panel](/en/features/panel). `remove` disconnects from the panel and deletes psm-agent; the nodes stay.
+
+`upgrade` updates PSM first and then replaces psm-agent with the release that the updated PSM names, restarting the service. The order matters: the version to install lives in PSM's own `lib/agent.sh`. The panel's **升级 agent** button on the servers page makes psm-agent run this command, so no SSH is needed. Nodes, relays and traffic accounting are left alone.
 
 ## psm version
 
