@@ -52,6 +52,8 @@ psm node add xray xhttp --tag my-kcp --port 9000 --mode mkcp
 
 mKCP 可以用 `--kcp-seed` 设置混淆种子、`--kcp-header` 选择伪装头。它走 UDP，没法挂到 443 复用上；按流量计费的机器请谨慎使用。
 
+mKCP 不套 TLS，而 Xray v26.7.7 起的客户端拒绝向公网地址发送不加密的 VLESS，所以新建的 mKCP 节点默认开启 VLESS Encryption（X25519），链接里的 `encryption=` 就是客户端要用的密钥。只给旧版客户端用时可以加 `--vless-enc none` 关掉。
+
 ## 导出给客户端
 
 ```bash

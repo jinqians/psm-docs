@@ -35,7 +35,7 @@ psm node add xray trojan --tag my-trojan --port 2096 --domain hk.example.com
 psm node add xray vmess  --tag my-vmess  --port 2053 --domain hk.example.com
 ```
 
-**sing-box / mihomo**：直接指定证书文件，自签证书时加 `--insecure 1`：
+**sing-box / mihomo**：直接指定证书文件，自签证书时加 `--insecure 1`（证书都不填则 PSM 自动签一张）。自签节点导出的链接带上证书指纹（`pcs`），v2rayN 等 Xray 内核的客户端据此校验证书——Xray 从 2026-06-01 起不再接受"跳过证书校验"：
 
 ```bash
 psm node add sing-box trojan --tag my-trojan --port 2096 \

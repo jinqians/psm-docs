@@ -52,6 +52,8 @@ psm node add xray xhttp --tag my-kcp --port 9000 --mode mkcp
 
 For mKCP, `--kcp-seed` sets the obfuscation seed and `--kcp-header` the disguise header. It runs over UDP, so it cannot go on shared port 443; be careful on servers billed by traffic.
 
+mKCP has no TLS, and Xray clients from v26.7.7 on refuse to send unencrypted VLESS to a public address, so a new mKCP node has VLESS Encryption (X25519) on by default: the link's `encryption=` is the key the client uses. For older clients only, `--vless-enc none` turns it off.
+
 ## Export for clients
 
 ```bash

@@ -37,11 +37,12 @@ psm node add sing-box hysteria2 --tag my-hy2 --port 8443 \
 
 | 参数 | 说明 |
 | --- | --- |
-| `--sni`、`--cert-path`、`--key-path` | 证书；用自签证书时再加 `--insecure 1` |
+| `--sni`、`--cert-path`、`--key-path` | 证书；用自签证书时再加 `--insecure 1`（都不填则 PSM 自动签一张，链接带上它的指纹 `pinSHA256`） |
 | `--password` | 认证密码，不填自动生成 |
 | `--obfs-pass` | 开启混淆并设置混淆密码 |
 | `--obfs-type salamander\|gecko` | 混淆类型，默认 Salamander；Gecko 需要 sing-box 1.14+、mihomo 1.19.26+ 或 Xray v26.3.27+ |
 | `--hop-ports 起始-结束` | 端口跳跃：把这段 UDP 端口都转到节点端口 |
+| `--bbr-profile conservative\|standard\|aggressive` | 服务器发数据时 BBR 拥塞控制的激进程度（不限速时生效），不填用内核默认的 standard；丢包高的跨境线路可以试 aggressive。需要 sing-box 1.14+、mihomo 1.19.24+ 或 Xray v26.4.13+（Xray 的稳定版 v26.3.27 没有，要装预览版） |
 | `--ech true` | 加上 ECH（sing-box / mihomo） |
 
 ## 端口跳跃

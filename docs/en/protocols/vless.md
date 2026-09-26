@@ -38,10 +38,10 @@ psm node add sing-box vless --tag my-vless --port 11443 \
 | `--sni` | the certificate's domain |
 | `--cert-path`, `--key-path` | certificate and key; certificates issued in main menu **10 (SSL certificates)** are in `/etc/nginx/ssl/DOMAIN/` |
 | `--transport` | the transport, as in the table above; `--path` sets the path for ws and the like |
-| `--insecure 1` | for a self-signed certificate: the exported link tells the client to skip verification |
+| `--insecure 1` | for a self-signed certificate (leave out the certificate and PSM signs one). The exported link carries the certificate's fingerprint, `pcs`: Xray-based clients such as v2rayN verify that one certificate (Xray refuses to skip verification since 2026-06-01); other clients keep skipping verification |
 | `--mount-443` | put the node on shared port 443 |
 | `--ech true` | add ECH (Encrypted Client Hello) |
-| `--vless-enc x25519\|mlkem768` | mihomo only: add VLESS Encryption on top |
+| `--vless-enc x25519\|mlkem768\|none` | mihomo only: add VLESS Encryption on top (sing-box clients cannot use it, so the node stays out of sing-box subscriptions); `psm node update … --vless-enc` turns it on, switches it or turns it off (`none`) |
 
 ## Export for clients
 

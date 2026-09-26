@@ -37,11 +37,12 @@ psm node add sing-box hysteria2 --tag my-hy2 --port 8443 \
 
 | Option | Meaning |
 | --- | --- |
-| `--sni`, `--cert-path`, `--key-path` | the certificate; add `--insecure 1` for a self-signed one |
+| `--sni`, `--cert-path`, `--key-path` | the certificate; add `--insecure 1` for a self-signed one (leave all three out and PSM signs one; the link carries its fingerprint, `pinSHA256`) |
 | `--password` | the authentication password; generated when left out |
 | `--obfs-pass` | turn obfuscation on with this password |
 | `--obfs-type salamander\|gecko` | obfuscation type, Salamander by default; Gecko needs sing-box 1.14+, mihomo 1.19.26+ or Xray v26.3.27+ |
 | `--hop-ports START-END` | port hopping: forward this UDP range to the node's port |
+| `--bbr-profile conservative\|standard\|aggressive` | how hard the server's BBR congestion control sends (without a bandwidth limit); unset keeps the core's default, standard — try aggressive on lossy cross-border lines. Needs sing-box 1.14+, mihomo 1.19.24+ or Xray v26.4.13+ (Xray's stable v26.3.27 has not got it; its preview has) |
 | `--ech true` | add ECH (sing-box / mihomo) |
 
 ## Port hopping

@@ -18,11 +18,11 @@ psm node delete CORE PROTO TAG --yes
 psm node export CORE PROTO TAG [--server HOST] [--format uri|json|surge|singbox|clash]
 ```
 
-`CORE` 是 `xray`、`sing-box`（也可写 `singbox`）或 `mihomo`。`--format singbox` 输出这个节点的 sing-box 客户端 outbound（JSON）；`--format clash` 把 TLS 协议（Hysteria2、TUIC、AnyTLS、VLESS + TLS、Trojan、VMess）输出为一个完整的 mihomo 节点（JSON，带 `skip-cert-verify`），其他协议用链接即可。
+`CORE` 是 `xray`、`sing-box`（也可写 `singbox`）或 `mihomo`。`--format singbox` 输出这个节点的 sing-box 客户端 outbound（JSON）；`--format clash` 把节点输出为一个完整的 mihomo 节点（JSON）：TLS 协议（Hysteria2、TUIC、AnyTLS、VLESS + TLS、Trojan、VMess）、REALITY、Vision、SS2022、SOCKS5，以及 Xray 的 XHTTP 类节点（mKCP 除外，mihomo 的 VLESS 没有 mKCP）。
 
 `psm node add` 不问问题，所以：
 
-- **证书**：sing-box / mihomo 的 TLS 协议和 Xray 的 Hysteria2 可以不给 `--cert-path` / `--key-path`。`--sni` 的域名在 `/etc/nginx/ssl/<域名>/` 有证书就用它，否则自动签一张自签证书（不给 `--sni` 时用 `www.bing.com`），节点记为 `insecure = 1`，导出的链接和配置会让客户端跳过校验。Xray 的 vision / xhttp / trojan / vmess 要求 `--domain` 已有证书，没有时拒绝并说明原因（不会让 Xray 整体起不来）。
+- **证书**：sing-box / mihomo 的 TLS 协议和 Xray 的 Hysteria2 可以不给 `--cert-path` / `--key-path`。`--sni` 的域名在 `/etc/nginx/ssl/<域名>/` 有证书就用它，否则自动签一张自签证书（不给 `--sni` 时用 `www.bing.com`），节点记为 `insecure = 1`。导出时带上这张证书的指纹，让客户端校验它而不是跳过：链接里是 `pcs`（vless/trojan/vmess）或 `pinSHA256`（hysteria2），同时保留 `allowInsecure=1` / `insecure=1` 给不认指纹的客户端；`--format clash` 加 `fingerprint`，`--format singbox` 用 `certificate_public_key_sha256`（sing-box 1.13+）代替 `insecure`。Xray 从 2026-06-01 起拒绝 `allowInsecure`，v2rayN 等 Xray 内核的客户端只认 `pcs`。Xray 的 vision / xhttp / trojan / vmess 要求 `--domain` 已有证书，没有时拒绝并说明原因（不会让 Xray 整体起不来）。
 - **出口分流**：`--exit warp|vpngate [--exit-sites all|ai|streaming|GEOSITE,…] [--exit-country CC]` 让这个节点的流量（全部，或只是这些网站；ai = OpenAI、Anthropic、Gemini，streaming = Netflix、Disney+、HBO、Prime Video、Spotify）从 Cloudflare WARP 或免费家宽线路（VPNGate，第一次在国家 CC 里找家宽线路，默认 JP）出去，其余照常直连；`--exit none` 或删除节点时规则一起删掉。`psm exit status|warp|vpngate [--core CORE] [--json]` 查看或提前准备这两种出口。
 - **REALITY 伪装目标**：`psm sni find [--engine netlas|quake|zoomeye|fofa] [--key-stdin] [--json]` 用网络测绘引擎查本机同一 ASN 里有证书的网站，逐个做 TLS 握手检查，按延迟列出可用的 SNI 和 dest；`--key-stdin` 从标准输入读引擎的 API Key，只用于这次查询。
 - **防火墙**：ufw、firewalld 或默认拒绝的 iptables 在工作时，自动放行节点端口（Hysteria2 / TUIC / WireGuard / mKCP 为 UDP，SS2022 / Snell / SOCKS 为 TCP 和 UDP），删除节点或改端口时把 PSM 加的规则删掉；本来就放行的端口不动。监听 127.0.0.1 的节点不放行。
@@ -89,7 +89,8 @@ psm relay add --tag in --listen-port 443 \
 其他选项：
 
 - `--mount-443`：节点挂到 [443 端口复用](/features/port-443)，改端口、改域名、删除时自动同步分流表。
-- `--vless-enc x25519|mlkem768`：开启 VLESS Encryption（抗量子）。
+- `--vless-enc x25519|mlkem768|none`：开启 VLESS Encryption（抗量子）；`update` 时可以开、换种类或用 `none` 关掉。Xray 的 mKCP 节点默认开启（新版 Xray 客户端拒绝不加密的 VLESS）。
+- `--bbr-profile conservative|standard|aggressive`：Hysteria2 服务器的 BBR 配置档（sing-box 1.14+、mihomo 1.19.24+、Xray v26.4.13+）。
 - `--skip-dest-probe`：跳过创建前对 REALITY 伪装目标的真实握手测试。
 - 查询默认隐藏密钥和密码，`--show-secrets` 显示；`export` 会包含客户端需要的凭据。
 - 应用失败会自动回滚节点记录和内核配置。

@@ -35,7 +35,7 @@ psm node add xray trojan --tag my-trojan --port 2096 --domain hk.example.com
 psm node add xray vmess  --tag my-vmess  --port 2053 --domain hk.example.com
 ```
 
-**sing-box / mihomo**: name the certificate files directly, adding `--insecure 1` for a self-signed one:
+**sing-box / mihomo**: name the certificate files directly, adding `--insecure 1` for a self-signed one (leave them out and PSM signs one). A self-signed node's link carries the certificate's fingerprint (`pcs`), which Xray-based clients such as v2rayN verify — Xray refuses to skip verification since 2026-06-01:
 
 ```bash
 psm node add sing-box trojan --tag my-trojan --port 2096 \

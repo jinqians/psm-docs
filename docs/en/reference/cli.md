@@ -18,11 +18,11 @@ psm node delete CORE PROTO TAG --yes
 psm node export CORE PROTO TAG [--server HOST] [--format uri|json|surge|singbox|clash]
 ```
 
-`CORE` is `xray`, `sing-box` (or `singbox`) or `mihomo`. `--format singbox` prints the node as a sing-box client outbound (JSON); `--format clash` prints the TLS protocols (Hysteria2, TUIC, AnyTLS, VLESS + TLS, Trojan, VMess) as one complete mihomo proxy (JSON, with `skip-cert-verify`); for the other protocols the link is enough.
+`CORE` is `xray`, `sing-box` (or `singbox`) or `mihomo`. `--format singbox` prints the node as a sing-box client outbound (JSON); `--format clash` prints the node as one complete mihomo proxy (JSON): the TLS protocols (Hysteria2, TUIC, AnyTLS, VLESS + TLS, Trojan, VMess), REALITY, Vision, SS2022, SOCKS5 and Xray's XHTTP nodes (not mKCP: mihomo's VLESS has no mKCP).
 
 `psm node add` asks no questions, so:
 
-- **Certificates**: the TLS protocols of sing-box / mihomo and Xray's Hysteria2 need no `--cert-path` / `--key-path`. When `/etc/nginx/ssl/<domain>/` holds a certificate for the `--sni` domain, it is used; otherwise PSM makes a self-signed one (for `www.bing.com` when there is no `--sni`), records `insecure = 1`, and the exported links and configs tell clients to accept it. Xray's vision / xhttp / trojan / vmess need a certificate for `--domain` already; without one the node is refused with the reason (instead of Xray refusing its whole config).
+- **Certificates**: the TLS protocols of sing-box / mihomo and Xray's Hysteria2 need no `--cert-path` / `--key-path`. When `/etc/nginx/ssl/<domain>/` holds a certificate for the `--sni` domain, it is used; otherwise PSM makes a self-signed one (for `www.bing.com` when there is no `--sni`), records `insecure = 1`, and every export carries that certificate's fingerprint so clients verify it rather than skip: `pcs` (vless/trojan/vmess) or `pinSHA256` (hysteria2) in the links, next to `allowInsecure=1` / `insecure=1` for clients that do not read a fingerprint; `fingerprint` in `--format clash`; `certificate_public_key_sha256` instead of `insecure` in `--format singbox` (sing-box 1.13+). Xray refuses `allowInsecure` since 2026-06-01, and Xray-based clients such as v2rayN read only `pcs`. Xray's vision / xhttp / trojan / vmess need a certificate for `--domain` already; without one the node is refused with the reason (instead of Xray refusing its whole config).
 - **Exits**: `--exit warp|vpngate [--exit-sites all|ai|streaming|GEOSITE,…] [--exit-country CC]` sends this node's traffic — all of it, or only those sites (ai = OpenAI, Anthropic, Gemini; streaming = Netflix, Disney+, HBO, Prime Video, Spotify) — out through Cloudflare WARP or the free residential line (VPNGate; the first time, a residential line in country CC, default JP); the rest goes out directly. `--exit none`, or deleting the node, removes the rule. `psm exit status|warp|vpngate [--core CORE] [--json]` shows or prepares the two exits.
 - **REALITY camouflage targets**: `psm sni find [--engine netlas|quake|zoomeye|fofa] [--key-stdin] [--json]` asks a cyberspace-mapping engine for hosts with certificates in this server's own ASN, checks each with a TLS handshake and lists the usable SNI and dest by latency; `--key-stdin` reads the engine's API key from stdin for that search only.
 - **Firewall**: when ufw, firewalld or a default-deny iptables is enforcing, the node's port is opened (UDP for Hysteria2 / TUIC / WireGuard / mKCP, TCP and UDP for SS2022 / Snell / SOCKS), and the rule PSM added is removed when the node is deleted or moves to another port; a port that was already open is left alone. Nodes listening on 127.0.0.1 are not opened.
@@ -89,7 +89,8 @@ Common protocol options:
 Other options:
 
 - `--mount-443`: mount the node on [shared port 443](/en/features/port-443); port, domain and deletion changes keep the routing table in step.
-- `--vless-enc x25519|mlkem768`: VLESS Encryption (post-quantum).
+- `--vless-enc x25519|mlkem768|none`: VLESS Encryption (post-quantum); on `update` it turns it on, switches the kind or turns it off (`none`). Xray's mKCP nodes have it by default (new Xray clients refuse unencrypted VLESS).
+- `--bbr-profile conservative|standard|aggressive`: the BBR profile of a Hysteria2 server (sing-box 1.14+, mihomo 1.19.24+, Xray v26.4.13+).
 - `--skip-dest-probe`: skip the real handshake test of a REALITY target before creating the node.
 - Queries hide keys and passwords unless `--show-secrets` is given; `export` includes the credentials clients need.
 - A change the core rejects is rolled back, node record and live config alike.

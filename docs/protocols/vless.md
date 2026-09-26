@@ -38,10 +38,10 @@ psm node add sing-box vless --tag my-vless --port 11443 \
 | `--sni` | 证书对应的域名 |
 | `--cert-path`、`--key-path` | 证书和私钥；主菜单 **10. SSL 证书管理** 签发的证书在 `/etc/nginx/ssl/域名/` |
 | `--transport` | 传输方式，见上表；`--path` 设置 ws 等的路径 |
-| `--insecure 1` | 自签证书时加上，导出的链接会让客户端跳过证书校验 |
+| `--insecure 1` | 自签证书时加上（证书都不填则 PSM 自动签一张并记为自签）。导出的链接带上证书指纹 `pcs`：v2rayN 等 Xray 内核的客户端据此校验这一张证书（Xray 从 2026-06-01 起不再接受跳过校验），其他客户端照旧跳过校验 |
 | `--mount-443` | 挂到 443 复用上 |
 | `--ech true` | 加上 ECH（加密 Client Hello） |
-| `--vless-enc x25519\|mlkem768` | 仅 mihomo：再加一层 VLESS Encryption |
+| `--vless-enc x25519\|mlkem768\|none` | 仅 mihomo：再加一层 VLESS Encryption（sing-box 客户端用不了，sing-box 订阅里不会有这个节点）；`psm node update … --vless-enc` 可以开、换或关（`none`） |
 
 ## 导出给客户端
 
