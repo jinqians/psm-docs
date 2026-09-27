@@ -34,15 +34,15 @@ psm migrate push root@新服务器IP --port 2222 --identity ~/.ssh/id_ed25519
 不方便从旧服务器直接连新服务器时，分两步：
 
 ```bash
-# 旧服务器：导出加密迁移包（会提示设置口令）
-psm migrate export --encrypt
+# 旧服务器：导出迁移包（默认用口令加密，会提示设置口令）
+psm migrate export
 
 # 把文件拷到新服务器，装好 PSM 后导入
 psm migrate import /root/psm-migrate-xxxx.tgz
 ```
 
 ::: danger 迁移包里是全部私钥和密码
-只通过 SSH 传输，导入后删除。建议始终加 `--encrypt`。
+只通过 SSH 传输，导入后删除。导出默认加密；`--no-encrypt` 可以不加密，但不建议。没有终端时（脚本里）用环境变量 `PSM_MIGRATE_PASS` 给口令。
 :::
 
 ## 会迁移什么

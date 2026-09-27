@@ -23,7 +23,7 @@ description: PSM 帮你加固科学上网 VPS：SSH 改密钥登录和端口（�
 
 ## 蜜罐
 
-在 RDP、MSSQL、Telnet 这类本机本来就没有服务的端口上设陷阱。有人连接就说明是在扫描，直接永久封禁并推送 Telegram 告警。PSM 会自动避开 SSH、代理节点和 Docker 服务正在用的端口，不会误伤。
+在 RDP、MSSQL、Telnet 这类本机本来就没有服务的端口上设陷阱。有人连接就说明是在扫描：封禁这个 IP 7 天（所有端口，包括 SSH），再犯一次时间加长，最长 4 周，并推送 Telegram 告警。不做永久封禁：自己用 nmap 或监控探测端口时误触，不至于把自己永远锁在外面；启用蜜罐时，当前 SSH 连接的来源地址会自动加进白名单。PSM 会自动避开 SSH、代理节点和 Docker 服务正在用的端口，不会误伤。陷阱规则放在防火墙最前面，开着 ufw、firewalld 也能生效。
 
 ## PSM 自带的防护
 
@@ -31,3 +31,18 @@ description: PSM 帮你加固科学上网 VPS：SSH 改密钥登录和端口（�
 - [443 端口复用](/features/port-443) 下，未知域名的连接直接断开，扫描器探测不到节点。
 - REALITY 伪装目标在 CDN 后面时会提醒你，并自动开启回落限速，避免服务器被当成免费中转，详见 [防止被偷流量](/features/anti-theft)。
 - 配置变更前自动备份，校验失败自动回滚。
+
+## PSM 从网上下载的东西
+
+| 下载什么 | 从哪里 | 怎么校验 |
+| --- | --- | --- |
+| PSM 本身（安装、更新） | `psm.jinqians.com` 的安装脚本，再从 GitHub 克隆仓库 | HTTPS；信任这个网站和 GitHub 仓库。更新前会把你对脚本的本地修改存成补丁再恢复成仓库版本 |
+| psm-agent | GitHub 发布页 | 和发布页的 `SHA256SUMS` 比对（完整性校验；发布页本身被篡改时防不住，没有另外的签名） |
+| acme.sh | GitHub 上固定的版本（3.1.6） | 和写在 PSM 里的 SHA-256 比对，不符就不装——不再是 `curl … \| sh` |
+| geoip / geosite 规则文件 | 规则项目的发布页 | 和它旁边发布的 `.sha256sum` 比对，不符或下载失败时保留原来的文件 |
+| Xray、sing-box、mihomo、realm、gost | 各项目的官方 GitHub 发布页 | 只靠 HTTPS，不另外核对校验和；装好后检查版本和配置能被接受 |
+| Docker（只有用到 Docker 的功能才装） | Docker 官方的安装脚本 `get.docker.com` | HTTPS；这是 Docker 官方推荐的装法，脚本本身没有签名 |
+
+安装脚本支持的环境变量（`PSM_REPO`、`PSM_AGENT_BASE_URL` 等）只是给测试和自建镜像用的：别人让你带着陌生的这类变量执行安装命令，不要照做。
+
+[迁移包](/features/migrate) 默认用口令加密；包里的 `SHA256SUMS` 用来发现传输损坏，不防篡改——防篡改靠的是加密和只经 SSH 传输。

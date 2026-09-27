@@ -1,59 +1,73 @@
 ---
-title: "Relays with realm: turn a VPS into a relay, forwarding TCP and UDP"
-description: Use PSM's realm relay to turn a VPS into a relay - a local port forwarded to the node port on your exit server, UDP included (needed for Hysteria2 and TUIC), with status reports pushed to Telegram.
-keywords: relay server setup, realm port forwarding, proxy relay, exit server, UDP forwarding
+title: "Relays: plain forwards and encrypted tunnels, realm and gost, load balancing and failover"
+description: Turn a VPS into a relay with PSM - realm or gost port forwarding (TCP and UDP), an entry → exit → landing tunnel over TLS or WebSocket with the exit's certificate pinned, several landing servers shared round-robin or with failover and health checks, rate limits, monthly quotas and expiry dates, ports picked for you and batches - from the psm relay command or the PSM panel.
+keywords: relay server setup, realm port forwarding, gost tunnel, relay load balancing, failover, relay rate limit, relay quota, landing server, UDP forwarding
 ---
 
-# Relays (realm)
+# Relays
 
-A relay puts another server between the client and the node: the client connects to the **relay**, which forwards the traffic unchanged to the **exit server** (the VPS that actually runs the node). Typical uses: an entry point with a better route, or one entry for several exit servers. PSM forwards ports with [realm](https://github.com/zhboner/realm).
+A relay puts another server between the client and the node: the client connects to the **entry server**, which carries the traffic on to the **landing server** (the VPS that actually runs the node). Typical uses: an entry point with a better route, one entry for several landing servers, or switching to another landing server by itself when one goes down.
 
-On the relay, open main menu **12 (Relay (realm))**; the first time, it offers to install realm:
+PSM has two ways to relay and two programs to do it:
 
-![Relay menu](/images/realm.en.png){.shot}
+| | Forward | Tunnel |
+| --- | --- | --- |
+| Path | entry → landing | entry → **exit** → landing |
+| Between the entry and the next hop | the traffic as it is (realm can wrap it in TLS, TCP only) | gost's relay protocol over TLS or WebSocket, with a password; UDP travels inside |
+| Program | realm (the default) or gost | gost |
+| For | a route from entry to landing that is fine as it is | an entry-to-exit leg that must be encrypted or disguised, or go through a CDN |
 
-## Adding a relay rule
+- **realm**: light; forwards TCP and UDP, and shares several landing servers round-robin or by client IP.
+- **gost**: can also pick **at random** or **fail over** (the first landing server that answers), checking each one over TCP every 15 seconds and leaving out one that does not answer; can **limit the rate**; tunnels are gost's alone.
 
-Choose **Add a relay rule** and fill in:
+Each program is installed the first time it is needed; they do not interfere (gost runs as the `psm-gost` service and leaves a gost of your own alone).
 
-| Prompt | Example |
-| --- | --- |
-| Rule name | `hk-reality` |
-| Local listening port | `5000` |
-| Exit server address (IP or domain) | `1.2.3.4` |
-| Exit server port | `443` (the port of the REALITY node on the exit server) |
-| Also forward UDP? | yes, when the node is a UDP protocol such as Hysteria2 or TUIC |
+## From the PSM panel (recommended)
 
-Then point the client at the **relay's IP and the local listening port** (in the example, `RELAY_IP:5000`) and leave everything else as it was.
+Once the servers have joined the [PSM panel](/en/features/panel), open its **中转** page and click **新建中转**: pick the entry server, the way to relay and the program, add the landing servers (several if you like), and leave the listening port empty to have one picked from the server's range. For a tunnel, pick an **exit server** too: the panel sets up the exit first, takes its certificate, then sets up the entry, which accepts that one certificate only. **批量添加** makes many at once, one per line.
 
-## Relays from the panel
+The list shows both ends' state, each hop's round trip and loss, the traffic, quota and expiry; a row opens onto charts of the round trip, loss and traffic, and the health of each landing server. The panel documentation has the [whole chapter](https://psm-panel-docs.pages.dev/guide/relays).
 
-Once a server has joined the [PSM panel](/en/features/panel), relays can be made on the panel's **中转** page instead of on the server:
+## From the command line: psm relay
 
-| Field | What it is |
-| --- | --- |
-| Entry server | the machine the rule is installed on, and the one clients connect to |
-| Listening port | the port it listens on; the panel opens it in the firewall |
-| Landing server | optional. Pick it when the landing machine is in the panel too — it only pairs the two ends so both can be named |
-| Landing address / port | what the entry server actually dials; fill it in even when the landing machine is not in the panel |
-| Also forward UDP | required for QUIC-based protocols such as Hysteria2 and TUIC |
+```bash
+# a forward: port 5000 here → the node on the landing server (realm, TCP and UDP)
+psm relay add --tag hk --listen-port 5000 --target 1.2.3.4:443 --udp
 
-The panel hands the rule to psm-agent on the entry server, which installs realm first if the server has none. Deleting a relay closes only the port the panel opened itself; a rule you allowed by hand is left alone.
+# two landing servers with failover (gost, with health checks), the port picked for you
+psm relay add --tag hk2 --listen-port auto --engine gost --strategy fifo \
+    --target 1.2.3.4:443 --target 5.6.7.8:443 --udp
 
-**How the hop is doing**: the list shows the latest round trip, jitter, loss and the traffic carried, and clicking a row opens charts of the round trip and jitter, the loss, and the traffic between measurements — over 1 hour, 6 hours, 24 hours or 7 days. psm-agent measures every minute and the panel keeps 7 days. The round trip is measured with TCP connects rather than ping: ICMP is filtered often enough on these networks that ping would report loss that is not there. A landing side that never answers shows 100% loss instead of an invented round trip.
+# 100 Mbit/s, 500 GB a month reset on the 1st, expiring at the end of the year
+psm relay update hk2 --speed 100 --limit-gb 500 --reset-day 1 --expires 2026-12-31
+```
 
-### Encrypting the hop
+A tunnel is two rules with the same name. Make the **exit** first; it prints the command for the entry (with the password and the certificate's fingerprint):
 
-Tick **对这一跳加密（TLS）** and the traffic between the entry and landing machines is wrapped in TLS, so what passes between them no longer looks like the node's own protocol. The client-to-entry leg is unaffected — no client configuration changes at all.
+```bash
+# on the exit: forward to the landing side (here, the exit's own node)
+psm relay add --tag tun --mode tunnel-exit --listen-port 8443 --transport wss \
+    --target 127.0.0.1:443
 
-- The landing machine has a certificate: enter the name on that certificate.
-- The landing machine uses a self-signed one: tick **接受自签名证书**, which keeps the encryption but does not verify the peer.
-- TLS wraps TCP only; UDP is still forwarded in the clear.
+# on the entry: the command the exit printed, pinning the exit's certificate
+psm relay add --tag tun --mode tunnel-entry --listen-port 443 --transport wss \
+    --exit EXIT_IP:8443 --secret SECRET --exit-pin CERT_SHA256 --udp
+```
+
+Every option is in the [command reference](/en/reference/cli#psm-relay-relays). Main menu **12 (Relay)** manages realm forwards (add, modify, delete, status report); gost's rules (load balancing, tunnels, rate limits) are listed there too — change them with `psm relay` or in the panel.
+
+## Details
+
+- **Ports**: `--listen-port auto` (an empty port in the panel) picks one nothing holds in the range, 20000-60000 unless `--port-range` says otherwise (in the panel: the server's "备注和中转端口段"). PSM opens it in the machine's firewall and closes only the ports it opened itself when the relay goes; your cloud provider's security group is still yours to open.
+- **Sharing several landing servers**: round robin (the default), by client IP (a client always lands on the same one), at random, failover. The last two and health checks need gost. Turn health checks off (`--no-probe`) when a landing server listens on UDP only: they use TCP.
+- **UDP**: QUIC-based protocols such as Hysteria2 and TUIC need `--udp`. gost keeps one client session on one source port, which QUIC needs to hold its connection.
+- **Quotas and expiry**: metered on the entry's listening port (with PSM's traffic accounting, like the nodes). Past the month's quota or the expiry date, the entry refuses new connections; it opens again on the reset day (in the server's time zone; 0 never resets) or when the quota is raised.
+- **A tunnel carries protocols in which the client speaks first**: every proxy protocol does (VLESS, SS2022, Trojan, Hysteria2…). One in which the server speaks first once connected — SSH, SMTP, FTP, VNC — waits for ever in a tunnel; use a forward for it.
+- **The exit is no open proxy**: it forwards to its own landing servers only, whatever the entry asks, and the entry needs the password.
+- **How the hop is doing**: the entry measures the round trip, jitter and loss to the next hop every minute (with TCP connects rather than ping: ICMP is filtered often enough on these networks that ping reports loss that is not there); a tunnel's exit also measures its hop to the landing server. `psm relay probe` shows it any time.
 
 ## More
 
-- **Modify / delete / list relay rules**.
-- **Status report**: the relay's resource use, speed and latency to the exit server, which can be pushed to [Telegram](/en/features/telegram).
-- Service status, restart, logs, uninstall.
-
-Allow the listening port in the relay's firewall and in your cloud provider's security group (UDP too for UDP rules).
+- **Status report**: the relay's resource use, speed and latency to the landing server, which can be pushed to [Telegram](/en/features/telegram).
+- `psm doctor` checks that each relay's program runs and its port listens.
+- Uninstalling PSM asks whether to remove realm and psm-gost too (with their rules and firewall openings).

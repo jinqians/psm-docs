@@ -1,6 +1,6 @@
 ---
 title: PSM 命令参考：psm node / relay / core / standalone / traffic / agent / user / migrate / doctor
-description: PSM 全部命令行用法：psm node 增删改查导出节点（REALITY、Hysteria2、TUIC、AnyTLS 等协议参数、443 复用、端口跳跃）、psm relay 中转（realm 端口转发，这一跳可选 TLS 加密）、psm core 不交互安装内核、psm standalone 独立 Snell v4/v5/v6 与 ss-rust、psm traffic 流量统计与限额、psm agent 接入 PSM Panel、psm user 多用户、psm migrate 迁移、psm doctor 诊断，以及定时任务入口。
+description: PSM 全部命令行用法：psm node 增删改查导出节点（REALITY、Hysteria2、TUIC、AnyTLS 等协议参数、443 复用、端口跳跃）、psm relay 中转（realm / gost 直接转发、加密隧道、多落地负载均衡与故障切换、限速限额和到期）、psm core 不交互安装内核、psm standalone 独立 Snell v4/v5/v6 与 ss-rust、psm traffic 流量统计与限额、psm agent 接入 PSM Panel、psm user 多用户、psm migrate 迁移、psm doctor 诊断，以及定时任务入口。
 ---
 
 # 命令参考
@@ -24,42 +24,8 @@ psm node export CORE PROTO TAG [--server HOST] [--format uri|json|surge|singbox|
 
 - **证书**：sing-box / mihomo 的 TLS 协议和 Xray 的 Hysteria2 可以不给 `--cert-path` / `--key-path`。`--sni` 的域名在 `/etc/nginx/ssl/<域名>/` 有证书就用它，否则自动签一张自签证书（不给 `--sni` 时用 `www.bing.com`），节点记为 `insecure = 1`。导出时带上这张证书的指纹，让客户端校验它而不是跳过：链接里是 `pcs`（vless/trojan/vmess）或 `pinSHA256`（hysteria2），同时保留 `allowInsecure=1` / `insecure=1` 给不认指纹的客户端；`--format clash` 加 `fingerprint`，`--format singbox` 用 `certificate_public_key_sha256`（sing-box 1.13+）代替 `insecure`。Xray 从 2026-06-01 起拒绝 `allowInsecure`，v2rayN 等 Xray 内核的客户端只认 `pcs`。Xray 的 vision / xhttp / trojan / vmess 要求 `--domain` 已有证书，没有时拒绝并说明原因（不会让 Xray 整体起不来）。
 - **出口分流**：`--exit warp|vpngate [--exit-sites all|ai|streaming|GEOSITE,…] [--exit-country CC]` 让这个节点的流量（全部，或只是这些网站；ai = OpenAI、Anthropic、Gemini，streaming = Netflix、Disney+、HBO、Prime Video、Spotify）从 Cloudflare WARP 或免费家宽线路（VPNGate，第一次在国家 CC 里找家宽线路，默认 JP）出去，其余照常直连；`--exit none` 或删除节点时规则一起删掉。`psm exit status|warp|vpngate [--core CORE] [--json]` 查看或提前准备这两种出口。
-- **REALITY 伪装目标**：`psm sni find [--engine netlas|quake|zoomeye|fofa] [--key-stdin] [--json]` 用网络测绘引擎查本机同一 ASN 里有证书的网站，逐个做 TLS 握手检查，按延迟列出可用的 SNI 和 dest；`--key-stdin` 从标准输入读引擎的 API Key，只用于这次查询。
+- **REALITY 伪装目标**：`psm sni find [--engine netlas|quake|zoomeye|fofa] [--key-stdin] [--json]` 用网络测绘引擎查本机同一 ASN 里有证书的网站，逐个做 TLS 握手检查，按延迟列出可用的 SNI 和 dest；`--key-stdin` 从标准输入读引擎的 API Key，只用于这次查询。`psm sni check --input - [--json]` 只做握手检查：候选从标准输入给出（`{"pairs":[{"sni":"…","dest":"IP:443"}]}`，最多 60 个），PSM 面板用它——面板自己查测绘引擎，API Key 不发到服务器。
 - **防火墙**：ufw、firewalld 或默认拒绝的 iptables 在工作时，自动放行节点端口（Hysteria2 / TUIC / WireGuard / mKCP 为 UDP，SS2022 / Snell / SOCKS 为 TCP 和 UDP），删除节点或改端口时把 PSM 加的规则删掉；本来就放行的端口不动。监听 127.0.0.1 的节点不放行。
-
-## psm relay：中转（realm）
-
-```bash
-psm relay list [--json]
-psm relay show TAG [--json]
-psm relay add --tag TAG --listen-port PORT --remote-host HOST --remote-port PORT
-              [--udp] [--tls] [--tls-sni NAME] [--tls-cert FILE] [--tls-key FILE]
-              [--tls-insecure] [--no-firewall] [--json]
-psm relay update TAG [--listen-port PORT] [--remote-host HOST] [--remote-port PORT]
-              [--udp true|false] [--tls true|false] [--tls-sni NAME] [--json]
-psm relay delete TAG --yes [--if-exists] [--json]
-psm relay probe [TAG] [--samples N] [--json]
-psm relay install [--json]
-```
-
-[中转](/features/relay) 的非交互接口。规则与菜单共用同一份存储（`config/realm/rules.json`），realm 的 `config.toml` 由它生成，所以菜单建的和命令行建的是同一回事。只有**入口机**需要建规则，落地机的节点配置不用改。realm 第一次用时自动安装（`psm relay add` 会装，也可以先 `psm relay install`）。
-
-**加密这一跳**：加 `--tls`，realm 会把转发的流量套一层 TLS，两台机器之间跑的就不再是节点协议原本的样子。规则算哪一端由**转发目标**决定——转发到本机（`127.0.0.1`，或本机自己的任一地址）是**落地端**，终止 TLS 并持有证书（`--tls-cert`/`--tls-key`，不给则按 `--tls-sni` 自动签一张自签证书）；转发到别的主机是**入口端**，负责拨 TLS（需要 `--tls-sni`，对端是自签证书时加 `--tls-insecure`）。
-
-```bash
-# 落地机：终止 TLS，转给本机 443 上的节点
-psm relay add --tag out --listen-port 8443 \
-    --remote-host 127.0.0.1 --remote-port 443 --tls
-
-# 入口机：拨 TLS 到落地机
-psm relay add --tag in --listen-port 443 \
-    --remote-host 落地机IP --remote-port 8443 \
-    --tls --tls-sni relay.example.com --tls-insecure
-```
-
-- **`--tls` 只包 TCP**：realm 的 TLS 作用在 TCP 流上，`--udp` 的 UDP 那一半仍是明文转发。Hysteria2、TUIC、WireGuard 这些走 UDP 的协议不会被它隐藏。
-- **防火墙**：和节点一样自动放行监听端口（`--udp` 时 TCP 和 UDP 都放行），改端口或删除规则时**只撤销 PSM 自己加过的那条**（记在 `config/firewall-ports`），你手工放行的端口不动；`--no-firewall` 可以完全不碰防火墙。
-- **链路质量与流量**：`psm relay probe` 报告到落地机的往返延迟、抖动、丢包，以及这条中转已经搬运的字节数。延迟用 TCP 连接测量而不是 ping：这类网络上 ICMP 常被过滤，ping 会报出并不存在的丢包，而中转本来跑的就是 TCP，连接耗时才是流量真正经历的。抖动取相邻两次往返之差的平均。落地机完全不通时报 `rtt_ms: null` 和 100% 丢包，不会编一个数字出来。流量按监听端口记在节点共用的 `PSM_TRF` 计量链上（标签 `relay-<TAG>`，不会和节点撞名），规则随中转的建立、改端口和删除一起维护。接入面板后 psm-agent 每 60 秒测一次、随同步上报，面板保留 7 天用来画图。
 
 | 内核 | 协议 |
 | --- | --- |
@@ -94,6 +60,43 @@ psm relay add --tag in --listen-port 443 \
 - `--skip-dest-probe`：跳过创建前对 REALITY 伪装目标的真实握手测试。
 - 查询默认隐藏密钥和密码，`--show-secrets` 显示；`export` 会包含客户端需要的凭据。
 - 应用失败会自动回滚节点记录和内核配置。
+
+## psm relay：中转
+
+```bash
+psm relay list [--json]
+psm relay show TAG [--json]
+psm relay add --tag TAG --listen-port PORT|auto --target HOST:PORT [--target HOST:PORT ...]
+              [--engine realm|gost] [--strategy round|rand|fifo|hash] [--no-probe]
+              [--udp] [--speed MBPS] [--limit-gb N] [--reset-day 0-28]
+              [--expires DATE|never] [--port-range MIN-MAX] [--no-firewall] [--json]
+              [--tls [--tls-sni NAME] [--tls-insecure] [--tls-cert FILE --tls-key FILE]]
+psm relay add --tag TAG --mode tunnel-exit --listen-port PORT|auto --target HOST:PORT ...
+              [--transport tls|mtls|wss|mwss] [--tls-sni NAME] [--ws-path PATH]
+              [--secret SECRET] [--strategy ...] [--json]
+psm relay add --tag TAG --mode tunnel-entry --listen-port PORT|auto --exit HOST:PORT
+              --secret SECRET (--exit-pin SHA256 | --exit-cert FILE | --tls-insecure)
+              [--transport ...] [--tls-sni NAME] [--ws-host HOST] [--ws-path PATH]
+              [--udp] [--speed MBPS] [--limit-gb N] [--expires DATE] [--json]
+psm relay add --batch FILE|- [上面的选项，对每一行都生效] [--json]
+psm relay update TAG [add 的任何选项；--target 会替换整个列表] [--json]
+psm relay delete TAG --yes [--if-exists] [--json]
+psm relay probe [TAG] [--samples N] [--json]
+psm relay install [--engine realm|gost] [--json]
+```
+
+[中转](/features/relay) 的非交互接口。两个转发程序的规则都存在 `config/realm/rules.json`（每条带 `engine`），realm 的 `config.toml` 和 psm-gost 的配置都由它生成，所以菜单、命令行和面板建的是同一回事。程序第一次用到时自动安装（`psm relay install --engine gost` 也可以先装）。
+
+- **转发程序**：默认 realm。`--strategy rand|fifo`（随机、主备）、`--speed` 和两种隧道模式要用 gost，给了这些选项而没写 `--engine gost` 会被拒绝并说明原因。
+- **多个落地**：`--target` 可以写多次（最多 16 个）；`round` 轮询（默认）、`hash` 按客户端 IP、`rand` 随机、`fifo` 主备。gost 在多个落地时每 15 秒对每个做一次 TCP 健康检查，连不上的暂时不用；落地只开了 UDP 时用 `--no-probe` 关掉。
+- **端口**：`--listen-port auto` 从 `--port-range`（默认 20000-60000）里挑一个本机没被占用的。结果里的 `listen_port` 是最后用的端口。
+- **隧道**：先在出口机 `--mode tunnel-exit`，它生成自签证书（或用 `--tls-cert/--tls-key`）和密码，并打印入口机要执行的完整命令；入口机 `--mode tunnel-entry` 用 `--exit-pin`（证书 SHA-256）或 `--exit-cert` 钉住这张证书，不认别的证书、也不看域名。`--transport`：`tls`、`mtls`（多路复用）、`wss`、`mwss`（WebSocket，可放在 CDN 后）。UDP 在隧道里传。出口只转发到自己的 `--target`，不是开放代理。隧道只承载客户端先说话的协议（所有代理协议都是）；SSH、SMTP 这类服务器先说话的要用直接转发。
+- **realm 自己的 TLS**（直接转发，只包 TCP）：`--tls`，规则算哪一端由转发目标决定——转发到本机（`127.0.0.1` 或本机的任一地址）是落地端，终止 TLS 并持有证书（`--tls-cert`/`--tls-key`，不给则按 `--tls-sni` 自签一张）；转发到别的主机是入口端，负责拨 TLS（要 `--tls-sni`，对端自签时加 `--tls-insecure`）。
+- **限速、限额和到期**：`--speed` 是上下行各自的 Mbit/s 上限（gost）。`--limit-gb` 按监听端口计量（记在节点共用的 `PSM_TRF` 计量链上，标签 `relay-<TAG>`），超过当月额度就拒绝新连接，`--reset-day`（0-28，按本机时区，0 为不重置）恢复；`--expires` 从那一刻起拒绝（`YYYY-MM-DD` 指本机那天结束时，带 `Z` 的 ISO 时间为 UTC），`never` 取消。两种程序都能用。
+- **批量**：`--batch FILE`（`-` 为标准输入）每行一条 `TAG PORT|auto HOST:PORT[,HOST:PORT...]`，其余选项对每行生效；任何一行不对就一条都不建。
+- **防火墙**：和节点一样自动放行监听端口（`--udp` 时 TCP 和 UDP 都放行），改端口或删除时**只撤销 PSM 自己加过的那条**（记在 `config/firewall-ports`），手工放行的不动；`--no-firewall` 完全不碰防火墙。
+- **改规则**：`update` 在同一个端口上把规则从 realm 挪到 gost（或反过来）也行；应用失败会恢复原来的规则。
+- **链路质量与流量**：`psm relay probe` 报告到下一跳的往返延迟、抖动、丢包（TCP 连接测量，不用 ping），多个落地时还有每个落地的结果，以及已经搬运的字节数、限额用量和是否暂停。落地完全不通时报 `rtt_ms: null` 和 100% 丢包，不会编一个数字。接入面板后 psm-agent 每 60 秒测一次、随同步上报。
 
 ## psm core：安装内核
 
@@ -170,7 +173,7 @@ psm user token NAME [--json]
 ## psm migrate：迁移
 
 ```bash
-psm migrate export [--output FILE] [--encrypt]
+psm migrate export [--output FILE] [--no-encrypt]
 psm migrate import FILE [--yes] [--force]
 psm migrate push [USER@]HOST [--port N] [--identity KEY] [--force]
 ```

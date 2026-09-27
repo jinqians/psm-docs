@@ -34,15 +34,15 @@ psm migrate push root@NEW-SERVER-IP --port 2222 --identity ~/.ssh/id_ed25519
 If the old server cannot reach the new one directly, do it in two steps:
 
 ```bash
-# old server: write an encrypted bundle (asks for a passphrase)
-psm migrate export --encrypt
+# old server: write a bundle (encrypted with a passphrase by default; it asks for one)
+psm migrate export
 
 # copy the file over, install PSM on the new server, then
 psm migrate import /root/psm-migrate-xxxx.tgz
 ```
 
 ::: danger The bundle holds every private key and password
-Move it over SSH only and delete it after importing. Always use `--encrypt`.
+Move it over SSH only and delete it after importing. Exports are encrypted by default; `--no-encrypt` writes a plain one, which is not recommended. Without a terminal (in a script), give the passphrase in `PSM_MIGRATE_PASS`.
 :::
 
 ## What moves

@@ -1,6 +1,6 @@
 ---
 title: "PSM CLI reference: psm node, relay, core, standalone, traffic, agent, user, migrate, doctor"
-description: Every PSM command-line command. psm node to list, add, update, delete and export nodes (REALITY, Hysteria2, TUIC, AnyTLS options, port 443 sharing, port hopping), psm relay for relays (realm port forwarding, with the hop optionally wrapped in TLS), psm core to install a core without questions, psm standalone for standalone Snell v4/v5/v6 and ss-rust, psm traffic for metering and limits, psm agent to join a PSM Panel, psm user for accounts, psm migrate, psm doctor, and the scheduled-job entry points.
+description: Every PSM command-line command. psm node to list, add, update, delete and export nodes (REALITY, Hysteria2, TUIC, AnyTLS options, port 443 sharing, port hopping), psm relay for relays (realm or gost forwards, encrypted tunnels, load balancing and failover over several landing servers, rate limits, quotas and expiry), psm core to install a core without questions, psm standalone for standalone Snell v4/v5/v6 and ss-rust, psm traffic for metering and limits, psm agent to join a PSM Panel, psm user for accounts, psm migrate, psm doctor, and the scheduled-job entry points.
 ---
 
 # CLI reference
@@ -24,42 +24,8 @@ psm node export CORE PROTO TAG [--server HOST] [--format uri|json|surge|singbox|
 
 - **Certificates**: the TLS protocols of sing-box / mihomo and Xray's Hysteria2 need no `--cert-path` / `--key-path`. When `/etc/nginx/ssl/<domain>/` holds a certificate for the `--sni` domain, it is used; otherwise PSM makes a self-signed one (for `www.bing.com` when there is no `--sni`), records `insecure = 1`, and every export carries that certificate's fingerprint so clients verify it rather than skip: `pcs` (vless/trojan/vmess) or `pinSHA256` (hysteria2) in the links, next to `allowInsecure=1` / `insecure=1` for clients that do not read a fingerprint; `fingerprint` in `--format clash`; `certificate_public_key_sha256` instead of `insecure` in `--format singbox` (sing-box 1.13+). Xray refuses `allowInsecure` since 2026-06-01, and Xray-based clients such as v2rayN read only `pcs`. Xray's vision / xhttp / trojan / vmess need a certificate for `--domain` already; without one the node is refused with the reason (instead of Xray refusing its whole config).
 - **Exits**: `--exit warp|vpngate [--exit-sites all|ai|streaming|GEOSITE,…] [--exit-country CC]` sends this node's traffic — all of it, or only those sites (ai = OpenAI, Anthropic, Gemini; streaming = Netflix, Disney+, HBO, Prime Video, Spotify) — out through Cloudflare WARP or the free residential line (VPNGate; the first time, a residential line in country CC, default JP); the rest goes out directly. `--exit none`, or deleting the node, removes the rule. `psm exit status|warp|vpngate [--core CORE] [--json]` shows or prepares the two exits.
-- **REALITY camouflage targets**: `psm sni find [--engine netlas|quake|zoomeye|fofa] [--key-stdin] [--json]` asks a cyberspace-mapping engine for hosts with certificates in this server's own ASN, checks each with a TLS handshake and lists the usable SNI and dest by latency; `--key-stdin` reads the engine's API key from stdin for that search only.
+- **REALITY camouflage targets**: `psm sni find [--engine netlas|quake|zoomeye|fofa] [--key-stdin] [--json]` asks a cyberspace-mapping engine for hosts with certificates in this server's own ASN, checks each with a TLS handshake and lists the usable SNI and dest by latency; `--key-stdin` reads the engine's API key from stdin for that search only. `psm sni check --input - [--json]` is the handshake check alone, for candidates given on stdin (`{"pairs":[{"sni":"…","dest":"IP:443"}]}`, up to 60): the PSM panel uses it, asking the mapping engine itself so the API key never reaches the server.
 - **Firewall**: when ufw, firewalld or a default-deny iptables is enforcing, the node's port is opened (UDP for Hysteria2 / TUIC / WireGuard / mKCP, TCP and UDP for SS2022 / Snell / SOCKS), and the rule PSM added is removed when the node is deleted or moves to another port; a port that was already open is left alone. Nodes listening on 127.0.0.1 are not opened.
-
-## psm relay: relays (realm)
-
-```bash
-psm relay list [--json]
-psm relay show TAG [--json]
-psm relay add --tag TAG --listen-port PORT --remote-host HOST --remote-port PORT
-              [--udp] [--tls] [--tls-sni NAME] [--tls-cert FILE] [--tls-key FILE]
-              [--tls-insecure] [--no-firewall] [--json]
-psm relay update TAG [--listen-port PORT] [--remote-host HOST] [--remote-port PORT]
-              [--udp true|false] [--tls true|false] [--tls-sni NAME] [--json]
-psm relay delete TAG --yes [--if-exists] [--json]
-psm relay probe [TAG] [--samples N] [--json]
-psm relay install [--json]
-```
-
-The non-interactive side of [relays](/en/features/relay). The rules share the menu's own store (`config/realm/rules.json`), from which realm's `config.toml` is generated, so a relay made from the menu and one made here are the same thing. Only the **entry** machine needs a rule; the landing machine's nodes stay as they are. realm is installed on first use (`psm relay add` does it, or run `psm relay install` first).
-
-**Encrypting the hop**: add `--tls` and realm wraps the forwarded stream in TLS, so what travels between the two machines no longer looks like the node's own protocol. Which side a rule is follows from where it forwards — to this machine (`127.0.0.1`, or any of its own addresses) it is the **landing** side, which terminates TLS and holds the certificate (`--tls-cert`/`--tls-key`, else a self-signed pair made for `--tls-sni`); to another host it is the **entry** side, which dials it (`--tls-sni` is required, with `--tls-insecure` when the other end is self-signed).
-
-```bash
-# landing: terminate TLS, hand it to the node on port 443 here
-psm relay add --tag out --listen-port 8443 \
-    --remote-host 127.0.0.1 --remote-port 443 --tls
-
-# entry: dial TLS to the landing machine
-psm relay add --tag in --listen-port 443 \
-    --remote-host LANDING_IP --remote-port 8443 \
-    --tls --tls-sni relay.example.com --tls-insecure
-```
-
-- **`--tls` covers TCP only**: realm's TLS wraps TCP streams, so with `--udp` the UDP half keeps going as plain UDP. Protocols that matter over UDP (Hysteria2, TUIC, WireGuard) are not hidden by it.
-- **Firewall**: the listening port is opened as a node's is (TCP and UDP with `--udp`), and changing the port or deleting the rule closes **only what PSM opened** (recorded in `config/firewall-ports`) — a port you opened yourself is left alone. `--no-firewall` leaves the firewall untouched.
-- **Link quality and traffic**: `psm relay probe` reports the round trip to the landing machine, the jitter, the loss, and the bytes this relay has carried. The round trip is measured with plain TCP connects rather than with ping: ICMP is filtered often enough on these networks that ping would report loss that is not there, and a relay carries TCP anyway, so a connect is what the traffic actually experiences. Jitter is the mean absolute difference between consecutive round trips. A landing side that never answers gives `rtt_ms: null` and 100% loss instead of a made-up number. Traffic is counted on the listening port through `PSM_TRF`, the same accounting chain the nodes use (tagged `relay-<TAG>`, so it cannot collide with a node's), and the rules follow the relay as it is created, moved to another port and deleted. On a server that joined a panel, psm-agent measures every 60 seconds and sends the readings with its sync; the panel keeps 7 days of them for its charts.
 
 | Core | Protocols |
 | --- | --- |
@@ -94,6 +60,43 @@ Other options:
 - `--skip-dest-probe`: skip the real handshake test of a REALITY target before creating the node.
 - Queries hide keys and passwords unless `--show-secrets` is given; `export` includes the credentials clients need.
 - A change the core rejects is rolled back, node record and live config alike.
+
+## psm relay: relays
+
+```bash
+psm relay list [--json]
+psm relay show TAG [--json]
+psm relay add --tag TAG --listen-port PORT|auto --target HOST:PORT [--target HOST:PORT ...]
+              [--engine realm|gost] [--strategy round|rand|fifo|hash] [--no-probe]
+              [--udp] [--speed MBPS] [--limit-gb N] [--reset-day 0-28]
+              [--expires DATE|never] [--port-range MIN-MAX] [--no-firewall] [--json]
+              [--tls [--tls-sni NAME] [--tls-insecure] [--tls-cert FILE --tls-key FILE]]
+psm relay add --tag TAG --mode tunnel-exit --listen-port PORT|auto --target HOST:PORT ...
+              [--transport tls|mtls|wss|mwss] [--tls-sni NAME] [--ws-path PATH]
+              [--secret SECRET] [--strategy ...] [--json]
+psm relay add --tag TAG --mode tunnel-entry --listen-port PORT|auto --exit HOST:PORT
+              --secret SECRET (--exit-pin SHA256 | --exit-cert FILE | --tls-insecure)
+              [--transport ...] [--tls-sni NAME] [--ws-host HOST] [--ws-path PATH]
+              [--udp] [--speed MBPS] [--limit-gb N] [--expires DATE] [--json]
+psm relay add --batch FILE|- [the options above, for every line] [--json]
+psm relay update TAG [any option of add; --target replaces the list] [--json]
+psm relay delete TAG --yes [--if-exists] [--json]
+psm relay probe [TAG] [--samples N] [--json]
+psm relay install [--engine realm|gost] [--json]
+```
+
+The non-interactive side of [relays](/en/features/relay). The rules of both programs live in `config/realm/rules.json` (each with its `engine`); realm's `config.toml` and psm-gost's configuration are generated from it, so the menu, the command line and the panel make the same thing. Each program is installed the first time it is needed (or ahead of time with `psm relay install --engine gost`).
+
+- **The program**: realm by default. `--strategy rand|fifo` (random, failover), `--speed` and the two tunnel modes need gost; asking for them without `--engine gost` is refused, with the reason.
+- **Several landing servers**: repeat `--target` (up to 16). `round` (the default), `hash` (by client IP), `rand`, `fifo` (failover). With several targets gost checks each over TCP every 15 s and leaves out one that does not answer; `--no-probe` turns that off for a target that listens on UDP only.
+- **Ports**: `--listen-port auto` picks one nothing on the machine holds in `--port-range` (20000-60000 by default). The result's `listen_port` is the port used.
+- **Tunnels**: make the exit first (`--mode tunnel-exit`): it makes a self-signed certificate (or takes `--tls-cert/--tls-key`) and a password, and prints the whole command for the entry. The entry (`--mode tunnel-entry`) pins that certificate with `--exit-pin` (its SHA-256) or `--exit-cert`, and accepts no other, whatever the name. `--transport`: `tls`, `mtls` (multiplexed), `wss`, `mwss` (WebSocket, which can sit behind a CDN). UDP travels inside. The exit forwards to its own `--target`s only: it is no open proxy. A tunnel carries protocols in which the client speaks first (every proxy protocol does); SSH, SMTP and the like, where the server speaks first, need a forward.
+- **realm's own TLS** (a forward, TCP only): `--tls`. Which end a rule is follows from its target: forwarding to this machine (`127.0.0.1` or any address of its own) it terminates TLS and holds the certificate (`--tls-cert`/`--tls-key`, or one it signs itself for `--tls-sni`); forwarding elsewhere it dials TLS (`--tls-sni` required, `--tls-insecure` for a self-signed peer).
+- **Rate, quota, expiry**: `--speed` limits each direction in Mbit/s (gost). `--limit-gb` meters the listening port (on the `PSM_TRF` chain the nodes use, tagged `relay-<TAG>`) and refuses new connections once the month's quota is used, until `--reset-day` (0-28, this machine's time zone; 0 never resets). `--expires` refuses them from then on (`YYYY-MM-DD` is the end of that day here; an ISO time with `Z` is UTC); `never` lifts it. Both programs can.
+- **Batches**: `--batch FILE` (`-` for stdin), one relay per line, `TAG PORT|auto HOST:PORT[,HOST:PORT...]`, the other options applying to every line; one bad line and none is made.
+- **Firewall**: the listening port is opened as for nodes (TCP and UDP with `--udp`); changing the port or deleting the rule removes **only the rule PSM added** (recorded in `config/firewall-ports`) and leaves ports you opened by hand alone; `--no-firewall` leaves the firewall untouched.
+- **Changing a rule**: `update` can move it from realm to gost (or back) on the same port; a change the program refuses puts the old rule back.
+- **How the hop is doing**: `psm relay probe` reports the round trip, jitter and loss to the next hop (TCP connects, not ping), each landing server's with several, the bytes carried, the quota used and whether it is paused. A landing side that never answers shows `rtt_ms: null` and 100% loss rather than an invented number. Once joined to a panel, psm-agent measures every 60 seconds and reports with its syncs.
 
 ## psm core: installing a core
 
@@ -170,7 +173,7 @@ psm user token NAME [--json]
 ## psm migrate: moving servers
 
 ```bash
-psm migrate export [--output FILE] [--encrypt]
+psm migrate export [--output FILE] [--no-encrypt]
 psm migrate import FILE [--yes] [--force]
 psm migrate push [USER@]HOST [--port N] [--identity KEY] [--force]
 ```

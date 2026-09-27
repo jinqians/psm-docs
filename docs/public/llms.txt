@@ -57,7 +57,7 @@ Features:
 - [Preventing traffic theft](https://psm-docs.pages.dev/en/features/anti-theft): shared-CDN camouflage targets, fallback rate limiting, unknown names dropped on 443, subscription and account protection
 - [SSL certificates](https://psm-docs.pages.dev/en/features/cert)
 - [Backup and restore](https://psm-docs.pages.dev/en/features/backup)
-- [Relays (realm)](https://psm-docs.pages.dev/en/features/relay)
+- [Relays: forwards, tunnels, load balancing (realm, gost)](https://psm-docs.pages.dev/en/features/relay)
 - [Telegram bot](https://psm-docs.pages.dev/en/features/telegram)
 - [Cloudflare DDNS and Tunnel](https://psm-docs.pages.dev/en/features/cloudflare)
 - [System tuning and VPS tests](https://psm-docs.pages.dev/en/features/system)
@@ -107,7 +107,7 @@ Reference:
 - [防止被偷流量](https://psm-docs.pages.dev/features/anti-theft)
 - [SSL 证书](https://psm-docs.pages.dev/features/cert)
 - [备份与恢复](https://psm-docs.pages.dev/features/backup)
-- [中转（realm）](https://psm-docs.pages.dev/features/relay)
+- [中转：直接转发、隧道、负载均衡（realm、gost）](https://psm-docs.pages.dev/features/relay)
 - [Telegram 机器人](https://psm-docs.pages.dev/features/telegram)
 - [Cloudflare DDNS 与 Tunnel](https://psm-docs.pages.dev/features/cloudflare)
 - [系统优化与 VPS 测试](https://psm-docs.pages.dev/features/system)
