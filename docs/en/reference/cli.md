@@ -151,6 +151,29 @@ psm agent remove --yes
 
 `upgrade` updates PSM first and then replaces psm-agent with the release that the updated PSM names, restarting the service. The order matters: the version to install lives in PSM's own `lib/agent.sh`. The panel's **升级 agent** button on the servers page makes psm-agent run this command, so no SSH is needed. Nodes, relays and traffic accounting are left alone.
 
+## psm check: IP quality and unlock
+
+```bash
+psm check [all|ip|mail|unlock] [-4|-6] [--keys-stdin] [--json]
+```
+
+This server's IP as the rest of the internet sees it, IPv4 and IPv6 apart, in about ten seconds:
+
+- `ip`: owner and location, the registry (a native or a broadcast IP), the kind of network (data centre, residential, business, mobile), several databases' risk scores, and the risk factors (proxy, VPN, Tor, server, abuse, bot).
+- `mail`: whether port 25 reaches the mail servers of Gmail, Outlook, Yahoo, iCloud, QQ and 163; about 30 DNS blacklists (IPv4).
+- `unlock`: Netflix, Disney+, YouTube Premium, Prime Video, ChatGPT, Claude, Gemini, TikTok, Reddit and Google search, each marked as a native or a DNS unlock.
+- None of them: all three.
+
+The check is a separate project, [ipcheck](https://github.com/jinqians/ipcheck):
+
+- PSM does not carry it. The release PSM pins is downloaded when the command runs and checked against its SHA-256; a mismatch is not run.
+- It is deleted after the run, with its temporary directory.
+- It also runs on its own, without PSM.
+
+`--keys-stdin` reads optional free API keys from stdin, one `NAME=value` a line (`ABUSEIPDB`, `IPQS`, `IP2LOCATION`), for more databases in the comparison. The keys reach ipcheck through its environment and never appear on any process's command line.
+
+The PSM Panel's **IP 质量与解锁**, in a server's ⋯ menu, has psm-agent run this command; the keys are set in the panel's settings.
+
 ## psm version
 
 Prints PSM's version (the date and commit of the checkout).

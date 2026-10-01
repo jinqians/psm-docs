@@ -151,6 +151,29 @@ psm agent remove --yes
 
 `upgrade` 先更新 PSM，再把 psm-agent 换成新 PSM 指定的版本并重启服务——要装的版本写在 PSM 自己的 `lib/agent.sh` 里，所以顺序不能反。面板"服务器"页的 **升级 agent** 按钮就是让 psm-agent 执行这条命令，不必登录 VPS。节点、中转和流量统计都不受影响。
 
+## psm check：IP 质量和解锁检测
+
+```bash
+psm check [all|ip|mail|unlock] [-4|-6] [--keys-stdin] [--json]
+```
+
+从外部看这台服务器的 IP，IPv4 和 IPv6 分开测，大约十秒：
+
+- `ip`：归属和位置，注册地（原生 IP 还是广播 IP），网络类型（机房、家宽、商业、移动），几个数据库各自的风险分，以及代理、VPN、Tor、机房、滥用、机器人这些风险因子。
+- `mail`：25 端口能否连到 Gmail、Outlook、Yahoo、iCloud、QQ、163 的收信服务器；约 30 个 DNS 黑名单（IPv4）。
+- `unlock`：Netflix、Disney+、YouTube Premium、Prime Video、ChatGPT、Claude、Gemini、TikTok、Reddit、Google 搜索，并标出原生解锁还是 DNS 解锁。
+- 不写就三项都测。
+
+检测本身是独立项目 [ipcheck](https://github.com/jinqians/ipcheck)：
+
+- PSM 不带它，执行时才下载 PSM 钉死的那个版本，校验 SHA-256，不对就不运行；
+- 运行完连同临时目录一起删除；
+- 也可以不装 PSM，单独运行。
+
+`--keys-stdin` 从标准输入读可选的免费 API Key，每行一个 `名称=值`（`ABUSEIPDB`、`IPQS`、`IP2LOCATION`），能多几家数据库对比。Key 只经环境变量交给 ipcheck，不出现在任何进程的命令行里。
+
+PSM Panel 服务器页 ⋯ 里的 **IP 质量与解锁** 就是让 psm-agent 执行这条命令；Key 在面板的系统设置里填。
+
 ## psm version
 
 输出 PSM 的版本（检出的日期和提交号）。
