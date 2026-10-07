@@ -32,6 +32,7 @@ Everything it knows a safe repair for gets repaired, and then everything is chec
 | curl, jq or openssl missing | installed; a jq that is too old (1.6) is replaced |
 | A certificate about to expire | renewed through acme.sh |
 | Disk nearly full | journal, oversized PSM logs and the package cache cleaned |
+| nginx.conf written by an older PSM, too small for a long domain on shared 443 | nginx.conf rewritten the current way, nginx reloaded |
 
 A config file with errors is only reported, never rewritten, so a repair cannot make things worse. `--fix` needs root.
 

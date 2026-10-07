@@ -57,6 +57,7 @@ Other options:
 - `--mount-443`: mount the node on [shared port 443](/en/features/port-443); port, domain and deletion changes keep the routing table in step.
 - `--vless-enc x25519|mlkem768|none`: VLESS Encryption (post-quantum); on `update` it turns it on, switches the kind or turns it off (`none`). Xray's mKCP nodes have it by default (new Xray clients refuse unencrypted VLESS).
 - `--bbr-profile conservative|standard|aggressive`: the BBR profile of a Hysteria2 server (sing-box 1.14+, mihomo 1.19.24+, Xray v26.4.13+).
+- `--disable-pmtud true|false`: switch off a Hysteria2 server's QUIC path MTU discovery (sing-box 1.14+, Xray; mihomo has no such option).
 - `--skip-dest-probe`: skip the real handshake test of a REALITY target before creating the node.
 - Queries hide keys and passwords unless `--show-secrets` is given; `export` includes the credentials clients need.
 - A change the core rejects is rolled back, node record and live config alike.

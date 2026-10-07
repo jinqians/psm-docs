@@ -20,7 +20,7 @@ Hysteria2 基于 QUIC（UDP），自带激进的拥塞控制，在丢包严重�
 - sing-box：主菜单 **2** → **4. 节点管理** → **3. Hysteria2**
 - mihomo：主菜单 **3** → **4** → **3**
 - Xray：主菜单 **4** → **4** → **8**
-- 官方独立版：主菜单 **7. Hysteria2 管理** → **1. 安装 / 重新配置**，之后可以改密码、带宽限速、证书，选"显示分享链接"导出
+- 官方独立版：主菜单 **7. Hysteria2 管理** → **1. 安装 / 重新配置**，之后可以改密码、带宽限速、证书，选"显示分享链接"导出；**10. MTU 探测（开 / 关）** 关闭或恢复路径 MTU 探测
 
 sing-box 和 mihomo 的菜单可以直接生成自签证书。
 
@@ -43,6 +43,7 @@ psm node add sing-box hysteria2 --tag my-hy2 --port 8443 \
 | `--obfs-type salamander\|gecko` | 混淆类型，默认 Salamander；Gecko 需要 sing-box 1.14+、mihomo 1.19.26+ 或 Xray v26.3.27+ |
 | `--hop-ports 起始-结束` | 端口跳跃：把这段 UDP 端口都转到节点端口 |
 | `--bbr-profile conservative\|standard\|aggressive` | 服务器发数据时 BBR 拥塞控制的激进程度（不限速时生效），不填用内核默认的 standard；丢包高的跨境线路可以试 aggressive。需要 sing-box 1.14+、mihomo 1.19.24+ 或 Xray v26.4.13+（Xray 的稳定版 v26.3.27 没有，要装预览版） |
+| `--disable-pmtud true\|false` | 关闭 QUIC 路径 MTU 探测（3x-ui 的 Disable Path MTU Discovery）：服务器不再试探更大的包，一直用较小的包发送，对容易丢大包、网络较差的线路有用；客户端不用改。sing-box 1.14+、Xray；mihomo 没有这个选项 |
 | `--ech true` | 加上 ECH（sing-box / mihomo） |
 
 ## 端口跳跃

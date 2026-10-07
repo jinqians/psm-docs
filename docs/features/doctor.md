@@ -32,6 +32,7 @@ psm doctor --fix
 | 缺 curl、jq、openssl | 自动安装；jq 太旧（1.6）会换成新版 |
 | 证书快过期 | 让 acme.sh 续期 |
 | 磁盘快满了 | 清理日志、超大的 PSM 日志和软件包缓存 |
+| nginx.conf 是旧版 PSM 写的，443 分流放不下长域名 | 按当前写法重写 nginx.conf，再重载 Nginx |
 
 配置文件本身有错误时只报告、不改动，避免把问题越改越大。`--fix` 需要 root 权限。
 

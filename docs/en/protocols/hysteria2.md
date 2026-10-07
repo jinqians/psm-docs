@@ -20,7 +20,7 @@ Hysteria2 runs over QUIC (UDP) with aggressive congestion control, and is usuall
 - sing-box: main menu **2** → **4 (Nodes)** → **3 (Hysteria2)**
 - mihomo: main menu **3** → **4** → **3**
 - Xray: main menu **4** → **4** → **8**
-- Official standalone server: main menu **7 (Hysteria2)** → **1 (Install / reconfigure)**; afterwards you can change the password, bandwidth limit and certificate, and "Show share link" exports it
+- Official standalone server: main menu **7 (Hysteria2)** → **1 (Install / reconfigure)**; afterwards you can change the password, bandwidth limit and certificate, "Show share link" exports it, and **10 (Path MTU discovery on / off)** switches path MTU discovery off or back on
 
 The sing-box and mihomo menus can generate a self-signed certificate for you.
 
@@ -43,6 +43,7 @@ psm node add sing-box hysteria2 --tag my-hy2 --port 8443 \
 | `--obfs-type salamander\|gecko` | obfuscation type, Salamander by default; Gecko needs sing-box 1.14+, mihomo 1.19.26+ or Xray v26.3.27+ |
 | `--hop-ports START-END` | port hopping: forward this UDP range to the node's port |
 | `--bbr-profile conservative\|standard\|aggressive` | how hard the server's BBR congestion control sends (without a bandwidth limit); unset keeps the core's default, standard — try aggressive on lossy cross-border lines. Needs sing-box 1.14+, mihomo 1.19.24+ or Xray v26.4.13+ (Xray's stable v26.3.27 has not got it; its preview has) |
+| `--disable-pmtud true\|false` | switch off QUIC path MTU discovery (3x-ui's Disable Path MTU Discovery): the server stops probing for larger packets and keeps sending small ones, which helps on paths that drop large packets; clients need no change. sing-box 1.14+ and Xray; mihomo has no such option |
 | `--ech true` | add ECH (sing-box / mihomo) |
 
 ## Port hopping

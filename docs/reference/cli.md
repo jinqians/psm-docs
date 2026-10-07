@@ -57,6 +57,7 @@ psm node export CORE PROTO TAG [--server HOST] [--format uri|json|surge|singbox|
 - `--mount-443`：节点挂到 [443 端口复用](/features/port-443)，改端口、改域名、删除时自动同步分流表。
 - `--vless-enc x25519|mlkem768|none`：开启 VLESS Encryption（抗量子）；`update` 时可以开、换种类或用 `none` 关掉。Xray 的 mKCP 节点默认开启（新版 Xray 客户端拒绝不加密的 VLESS）。
 - `--bbr-profile conservative|standard|aggressive`：Hysteria2 服务器的 BBR 配置档（sing-box 1.14+、mihomo 1.19.24+、Xray v26.4.13+）。
+- `--disable-pmtud true|false`：关闭 Hysteria2 服务器的 QUIC 路径 MTU 探测（sing-box 1.14+、Xray；mihomo 没有这个选项）。
 - `--skip-dest-probe`：跳过创建前对 REALITY 伪装目标的真实握手测试。
 - 查询默认隐藏密钥和密码，`--show-secrets` 显示；`export` 会包含客户端需要的凭据。
 - 应用失败会自动回滚节点记录和内核配置。
